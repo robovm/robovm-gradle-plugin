@@ -25,7 +25,6 @@ public class RoboVMPluginExtension {
 
     public static final String NAME = "robovm";
     final Project project;
-    String version;
     String propertiesFile;
     String configFile;
     String iosSignIdentity;
@@ -34,11 +33,6 @@ public class RoboVMPluginExtension {
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
-        this.version = RoboVMPlugin.ROBO_VM_VERSION;
-    }
-
-    public String getVersion() {
-        return version;
     }
 
     public String getPropertiesFile() {
