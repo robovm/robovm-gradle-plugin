@@ -1,6 +1,5 @@
-*.class
+.gradle
+.DS_Store
+/out
+/build
 
-# Package Files #
-*.jar
-*.war
-*.ear

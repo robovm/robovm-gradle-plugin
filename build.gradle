@@ -1,0 +1,85 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = 'com.github.jtakakura'
+archivesBaseName = 'gradle-robovm-plugin'
+version = '0.0.1'
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+ext {
+    roboVMVersion = "0.0.7"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile "org.robovm:robovm-compiler:${roboVMVersion}"
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+signing {
+    required = { gradle.taskGraph.hasTask(uploadArchives) && !version.endsWith("SNAPSHOT") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            pom.project {
+                name 'Gradle RoboVM Plugin'
+                packaging 'jar'
+                description project.description
+                url 'https://github.com/jtakakura/gradle-robovm-plugin'
+                scm {
+                    url 'git@github.com:jtakakura/gradle-robovm-plugin.git'
+                    connection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
+                    developerConnection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
+                }
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id sonatypeUsername
+                        name sonatypeFullname
+                    }
+                }
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
