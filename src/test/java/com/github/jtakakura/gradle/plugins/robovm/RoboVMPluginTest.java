@@ -4,6 +4,8 @@
  */
 package com.github.jtakakura.gradle.plugins.robovm;
 
+import com.github.jtakakura.gradle.tasks.robovm.CreateIPATask;
+import com.github.jtakakura.gradle.tasks.robovm.IOSDeviceTask;
 import com.github.jtakakura.gradle.tasks.robovm.IPadSimulatorTask;
 import com.github.jtakakura.gradle.tasks.robovm.IPhoneSimulatorTask;
 import groovy.lang.Closure;
@@ -72,6 +74,24 @@ public class RoboVMPluginTest {
         Task task = project.getTasks().getByName("launchIPadSimulator");
 
         assertTrue(task instanceof IPadSimulatorTask);
+        assertEquals(task.getGroup(), null);
+        assertEquals(task.getDescription(), null);
+    }
+
+    @Test
+    public void testGetTaskByNameLaunchIOSDevice() {
+        Task task = project.getTasks().getByName("launchIOSDevice");
+
+        assertTrue(task instanceof IOSDeviceTask);
+        assertEquals(task.getGroup(), null);
+        assertEquals(task.getDescription(), null);
+    }
+
+    @Test
+    public void testGetTaskByNameCreateIPA() {
+        Task task = project.getTasks().getByName("createIPA");
+
+        assertTrue(task instanceof CreateIPATask);
         assertEquals(task.getGroup(), null);
         assertEquals(task.getDescription(), null);
     }
