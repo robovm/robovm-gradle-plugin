@@ -42,8 +42,6 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
-import org.eclipse.aether.connector.wagon.WagonProvider;
-import org.eclipse.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.impl.VersionResolver;
@@ -275,6 +273,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         request.setRepositories(remoteRepositories);
 
         getLogger().debug("Resolving artifact " + artifact + " from " + remoteRepositories);
+
+        //System.err.println("Resolving artifact " + artifact + " from " + remoteRepositories);
 
         ArtifactResult result;
 
