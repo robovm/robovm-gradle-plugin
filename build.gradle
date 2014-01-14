@@ -4,13 +4,17 @@ apply plugin: 'signing'
 
 group = 'com.github.jtakakura'
 archivesBaseName = 'gradle-robovm-plugin'
-version = '0.0.1'
+version = '0.0.2'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
     roboVMVersion = "0.0.7"
+
+    mavenVersion = '3.1.1'
+    aetherVersion = '0.9.0.M3'
+    wagonVersion = '1.0'
 }
 
 repositories {
@@ -20,6 +24,19 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
+
+    compile "org.apache.maven:maven-aether-provider:${mavenVersion}"
+    compile "org.apache.maven.wagon:wagon-ssh:${wagonVersion}"
+    compile "org.eclipse.aether:aether-connector-basic:${aetherVersion}"
+    compile "org.eclipse.aether:aether-transport-wagon:${aetherVersion}"
+    compile "org.eclipse.aether:aether-transport-classpath:${aetherVersion}"
+    compile "org.eclipse.aether:aether-transport-file:${aetherVersion}"
+    compile "org.eclipse.aether:aether-transport-http:${aetherVersion}"
+    compile "org.eclipse.aether:aether-util:${aetherVersion}"
+    compile "org.eclipse.aether:aether-test-util:${aetherVersion}"
+    compile "org.eclipse.aether:aether-api:${aetherVersion}"
+    compile "org.eclipse.aether:aether-impl:${aetherVersion}"
+
     compile "org.robovm:robovm-compiler:${roboVMVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.10'
 }
@@ -45,41 +62,6 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            pom.project {
-                name 'Gradle RoboVM Plugin'
-                packaging 'jar'
-                description project.description
-                url 'https://github.com/jtakakura/gradle-robovm-plugin'
-                scm {
-                    url 'git@github.com:jtakakura/gradle-robovm-plugin.git'
-                    connection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
-                    developerConnection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
-                }
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-                developers {
-                    developer {
-                        id sonatypeUsername
-                        name sonatypeFullname
-                    }
-                }
-            }
-        }
-    }
-}
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+    gradleVersion = '1.9'
 }

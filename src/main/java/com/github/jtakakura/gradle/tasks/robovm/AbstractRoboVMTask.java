@@ -27,21 +27,45 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.mvn3.org.apache.maven.repository.internal.MavenRepositorySystemSession;
-import org.gradle.mvn3.org.apache.maven.repository.internal.MavenServiceLocator;
-import org.gradle.mvn3.org.apache.maven.wagon.Wagon;
-import org.gradle.mvn3.org.apache.maven.wagon.providers.http.HttpWagon;
-import org.gradle.mvn3.org.sonatype.aether.RepositorySystem;
-import org.gradle.mvn3.org.sonatype.aether.RepositorySystemSession;
-import org.gradle.mvn3.org.sonatype.aether.connector.wagon.WagonProvider;
-import org.gradle.mvn3.org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
-import org.gradle.mvn3.org.sonatype.aether.repository.LocalRepository;
-import org.gradle.mvn3.org.sonatype.aether.repository.RemoteRepository;
-import org.gradle.mvn3.org.sonatype.aether.resolution.ArtifactRequest;
-import org.gradle.mvn3.org.sonatype.aether.resolution.ArtifactResolutionException;
-import org.gradle.mvn3.org.sonatype.aether.resolution.ArtifactResult;
-import org.gradle.mvn3.org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
-import org.gradle.mvn3.org.sonatype.aether.util.artifact.DefaultArtifact;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.repository.internal.DefaultArtifactDescriptorReader;
+import org.apache.maven.repository.internal.DefaultVersionRangeResolver;
+import org.apache.maven.repository.internal.DefaultVersionResolver;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.apache.maven.wagon.Wagon;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
+import org.eclipse.aether.deployment.DeployRequest;
+import org.eclipse.aether.deployment.DeploymentException;
+import org.eclipse.aether.impl.VersionResolver;
+import org.eclipse.aether.impl.DependencyCollector;
+import org.eclipse.aether.impl.DefaultServiceLocator;
+import org.eclipse.aether.installation.InstallationException;
+import org.eclipse.aether.internal.impl.DefaultDependencyCollector;
+import org.eclipse.aether.internal.impl.DefaultTransporterProvider;
+import org.eclipse.aether.repository.Authentication;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.eclipse.aether.repository.RemoteRepository.Builder;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
+import org.eclipse.aether.spi.connector.transport.TransporterFactory;
+import org.eclipse.aether.spi.connector.transport.TransporterProvider;
+import org.eclipse.aether.transport.file.FileTransporterFactory;
+import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
+import org.eclipse.aether.util.repository.AuthenticationBuilder;
+
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
@@ -250,6 +274,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         getLogger().debug("Resolving artifact " + artifact + " from " + remoteRepositories);
 
+        //System.err.println("Resolving artifact " + artifact + " from " + remoteRepositories);
+
         ArtifactResult result;
 
         try {
@@ -292,42 +318,62 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     }
 
     private RepositorySystem createRepositorySystem() {
-        MavenServiceLocator locator = new MavenServiceLocator();
-        locator.addService(RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class);
-        locator.setService(WagonProvider.class, ManualWagonProvider.class);
+        DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
+        locator.addService( RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class );
+        locator.addService(VersionResolver.class, DefaultVersionResolver.class);
+        locator.addService(TransporterProvider.class, DefaultTransporterProvider.class);
+        locator.addService( TransporterFactory.class, HttpTransporterFactory.class );
+        locator.addService(DependencyCollector.class, DefaultDependencyCollector.class);
 
-        return locator.getService(RepositorySystem.class);
+        //MKMK MavenServiceLocator locator = new MavenServiceLocator();
+        //MKMK locator.addService( TransporterFactory.class, FileTransporterFactory.class );
+        //MKMK locator.addService(RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class);
+        //MKMK locator.setService(WagonProvider.class, ManualWagonProvider.class);
+
+        RepositorySystem rep_sys = locator.getService(RepositorySystem.class);
+        if (repositorySystem == null) {
+            System.err.println("Couldn't initialize local maven repository system.");
+            System.exit(0);
+        }
+
+        return rep_sys;
     }
 
     private RepositorySystemSession createRepositorySystemSession() {
         LocalRepository localRepository = new LocalRepository(System.getProperty("user.home") + "/.m2/repository");
-        MavenRepositorySystemSession session = new MavenRepositorySystemSession();
-        session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(localRepository));
+        // MavenRepositorySystemSession session = new MavenRepositorySystemSession();
+        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+
+        System.err.println("session: "+session+", localrepo: "+localRepository+", reposys: "+repositorySystem);
+        LocalRepositoryManager repoman = repositorySystem.newLocalRepositoryManager(session, localRepository);
+        System.err.println("repoman: "+repoman);
+        session.setLocalRepositoryManager(repoman);
 
         return session;
     }
 
     private List<RemoteRepository> createRemoteRepositories() {
         List<RemoteRepository> repositories = new ArrayList<RemoteRepository>();
-        repositories.add(new RemoteRepository("maven-central", "default", "http://repo1.maven.org/maven2/"));
+        //MKMKrepositories.add(new RemoteRepository("maven-central", "default", "http://repo1.maven.org/maven2/"));
+        repositories.add((new RemoteRepository.Builder("maven-central", "default", "http://repo1.maven.org/maven2/")).build());
 
         return repositories;
     }
 
-    public static class ManualWagonProvider implements WagonProvider {
+    // MKMK Commented out code below; probably/hopefully obsolete.
+    // public static class ManualWagonProvider implements WagonProvider {
+    //     @Override
+    //     public Wagon lookup(String roleHint) throws Exception {
+    //         if ("http".equals(roleHint)) {
+    //             return new HttpWagon();
+    //         }
 
-        @Override
-        public Wagon lookup(String roleHint) throws Exception {
-            if ("http".equals(roleHint)) {
-                return new HttpWagon();
-            }
+    //         return null;
+    //     }
 
-            return null;
-        }
-
-        @Override
-        public void release(Wagon wagon) {
-            // noop
-        }
-    }
+    //     @Override
+    //     public void release(Wagon wagon) {
+    //         // noop
+    //     }
+    // }
 }

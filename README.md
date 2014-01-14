@@ -2,6 +2,13 @@ gradle-robovm-plugin
 ====================
 RoboVM Gradle plugin
 
+WARNING: This is a first stab at porting this plugin to gradle
+1.9. The instructions below for getting and using this version will
+not work; I'm not pushing this plugin to any maven repos yet. If you
+want to test this plugin, you need to include it as a gradle file
+dependency; using maven-style file references will not work. Yet at
+least.
+
 # Usage
 To use the RoboVM plugin, include in your build script:
 
