@@ -55,7 +55,7 @@ uploadArchives {
             pom.project {
                 name 'Gradle RoboVM Plugin'
                 packaging 'jar'
-                description project.description
+                description 'The Gradle RoboVM Plugin provides a way to build RoboVM based distribution bundles.'
                 url 'https://github.com/jtakakura/gradle-robovm-plugin'
                 scm {
                     url 'git@github.com:jtakakura/gradle-robovm-plugin.git'
