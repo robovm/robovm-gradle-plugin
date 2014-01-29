@@ -22,6 +22,11 @@ ext {
     // Configure your application main class
     mainClassName = "org.robovm.sample.ios.RoboVMSampleIOSApp"
 }
+robovm {
+    // Configure robovm
+    iosSignIdentity = ""
+    iosProvisioningProfile = ""
+}
 ```
 
 ## Tasks
