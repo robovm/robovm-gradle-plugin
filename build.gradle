@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 group = 'com.github.jtakakura'
 archivesBaseName = 'gradle-robovm-plugin'
-version = '0.0.2'
+version = '0.0.3'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
