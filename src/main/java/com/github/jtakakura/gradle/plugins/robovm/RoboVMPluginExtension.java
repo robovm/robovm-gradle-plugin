@@ -35,23 +35,47 @@ public class RoboVMPluginExtension {
         this.project = project;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     public String getPropertiesFile() {
         return propertiesFile;
+    }
+
+    public void setPropertiesFile(String propertiesFile) {
+        this.propertiesFile = propertiesFile;
     }
 
     public String getConfigFile() {
         return configFile;
     }
 
+    public void setConfigFile(String configFile) {
+        this.configFile = configFile;
+    }
+
     public String getIosSignIdentity() {
         return iosSignIdentity;
+    }
+
+    public void setIosSignIdentity(String iosSignIdentity) {
+        this.iosSignIdentity = iosSignIdentity;
     }
 
     public String getIosProvisioningProfile() {
         return iosProvisioningProfile;
     }
 
-    public String getIOSSimulatorSdk() {
+    public void setIosProvisioningProfile(String iosProvisioningProfile) {
+        this.iosProvisioningProfile = iosProvisioningProfile;
+    }
+
+    public String getiOSSimulatorSdk() {
         return iOSSimulatorSdk;
+    }
+
+    public void setiOSSimulatorSdk(String iOSSimulatorSdk) {
+        this.iOSSimulatorSdk = iOSSimulatorSdk;
     }
 }
