@@ -24,12 +24,12 @@ import org.gradle.api.Project;
 public class RoboVMPluginExtension {
 
     public static final String NAME = "robovm";
-    final Project project;
-    String propertiesFile;
-    String configFile;
-    String iosSignIdentity;
-    String iosProvisioningProfile;
-    String iOSSimulatorSdk;
+    private final Project project;
+    private String propertiesFile;
+    private String configFile;
+    private String iosSignIdentity;
+    private String iosProvisioningProfile;
+    private String iosSimulatorSdk;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -71,11 +71,11 @@ public class RoboVMPluginExtension {
         this.iosProvisioningProfile = iosProvisioningProfile;
     }
 
-    public String getiOSSimulatorSdk() {
-        return iOSSimulatorSdk;
+    public String getIosSimulatorSdk() {
+        return iosSimulatorSdk;
     }
 
-    public void setiOSSimulatorSdk(String iOSSimulatorSdk) {
-        this.iOSSimulatorSdk = iOSSimulatorSdk;
+    public void setIosSimulatorSdk(String iosSimulatorSdk) {
+        this.iosSimulatorSdk = iosSimulatorSdk;
     }
 }

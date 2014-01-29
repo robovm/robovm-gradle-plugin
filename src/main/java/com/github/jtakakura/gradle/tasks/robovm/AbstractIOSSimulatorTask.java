@@ -34,7 +34,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
             Config config = build(OS.ios, Arch.x86, TargetType.ios);
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
             launchParameters.setFamily(targetFamily);
-            launchParameters.setSdk(extension.getiOSSimulatorSdk());
+            launchParameters.setSdk(extension.getIosSimulatorSdk());
             config.getTarget().launch(launchParameters).waitFor();
         } catch (InterruptedException e) {
             throw new GradleException("Failed to launch IOS Simulator", e);
