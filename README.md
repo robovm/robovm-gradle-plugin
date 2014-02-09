@@ -12,9 +12,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.3'
+        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.4'
     }
 }
+
 // Apply the plugin
 apply plugin: 'robovm'
 
@@ -22,6 +23,7 @@ ext {
     // Configure your application main class
     mainClassName = "org.robovm.sample.ios.RoboVMSampleIOSApp"
 }
+
 robovm {
     // Configure robovm
     iosSignIdentity = ""
