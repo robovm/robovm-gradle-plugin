@@ -30,7 +30,7 @@ import org.gradle.api.Project;
  */
 public class RoboVMPlugin implements Plugin<Project> {
 
-    public static final String ROBO_VM_VERSION = "0.0.8";
+    public static final String ROBO_VM_VERSION = "0.0.9";
 
     @Override
     public void apply(Project project) {
