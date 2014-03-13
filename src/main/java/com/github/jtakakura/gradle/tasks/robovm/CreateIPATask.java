@@ -34,7 +34,7 @@ public class CreateIPATask extends AbstractRoboVMTask {
     @Override
     public void invoke() {
         try {
-            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios, true);
+            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios, false);
             IOSTarget target = (IOSTarget) config.getTarget();
             target.createIpa();
         } catch (IOException e) {
