@@ -16,8 +16,6 @@
 package com.github.jtakakura.gradle.tasks.robovm;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gradle.api.GradleException;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
