@@ -25,6 +25,6 @@ public class IPhoneSimulatorTask extends AbstractIOSSimulatorTask {
 
     @Override
     public void invoke() {
-        launch(IOSSimulatorLaunchParameters.Family.iphone);
+        launch(IOSSimulatorLaunchParameters.Family.iPhoneRetina4Inch);
     }
 }

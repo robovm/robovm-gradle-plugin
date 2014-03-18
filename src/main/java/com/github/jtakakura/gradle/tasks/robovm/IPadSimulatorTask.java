@@ -25,6 +25,6 @@ public class IPadSimulatorTask extends AbstractIOSSimulatorTask {
 
     @Override
     public void invoke() {
-        launch(IOSSimulatorLaunchParameters.Family.ipad);
+        launch(IOSSimulatorLaunchParameters.Family.iPadRetina);
     }
 }
