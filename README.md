@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.4'
+        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.5'
     }
 }
 
@@ -28,6 +28,7 @@ robovm {
     // Configure robovm
     iosSignIdentity = ""
     iosProvisioningProfile = ""
+    iosSkipSigning = false
 }
 ```
 
