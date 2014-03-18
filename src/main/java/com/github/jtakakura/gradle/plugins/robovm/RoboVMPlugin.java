@@ -22,6 +22,7 @@ import com.github.jtakakura.gradle.tasks.robovm.IPhoneSimulatorTask;
 import java.util.HashMap;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.robovm.compiler.Version;
 
 /**
  * Gradle plugin that extends the Java plugin for RoboVM development.
@@ -30,7 +31,9 @@ import org.gradle.api.Project;
  */
 public class RoboVMPlugin implements Plugin<Project> {
 
-    public static final String ROBO_VM_VERSION = "0.0.9";
+    public static String getRoboVMVersion() {
+        return Version.getVersion();
+    }
 
     @Override
     public void apply(Project project) {
