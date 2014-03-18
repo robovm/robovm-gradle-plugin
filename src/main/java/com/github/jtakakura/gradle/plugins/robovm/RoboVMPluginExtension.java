@@ -30,6 +30,7 @@ public class RoboVMPluginExtension {
     private String iosSignIdentity;
     private String iosProvisioningProfile;
     private String iosSimulatorSdk;
+    private boolean iosSkipSigning = false;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -78,4 +79,13 @@ public class RoboVMPluginExtension {
     public void setIosSimulatorSdk(String iosSimulatorSdk) {
         this.iosSimulatorSdk = iosSimulatorSdk;
     }
+
+    public boolean isIosSkipSigning() {
+        return iosSkipSigning;
+    }
+
+    public void setIosSkipSigning(boolean iosSkipSigning) {
+        this.iosSkipSigning = iosSkipSigning;
+    }
+
 }

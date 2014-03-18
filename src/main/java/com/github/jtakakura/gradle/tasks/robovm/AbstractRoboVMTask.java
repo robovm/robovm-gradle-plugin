@@ -151,18 +151,22 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 .os(os)
                 .arch(arch);
 
-        if (extension.getIosSignIdentity() != null) {
-            String iosSignIdentity = extension.getIosSignIdentity();
+        if (extension.isIosSkipSigning()) {
+            builder.iosSkipSigning(true);
+        } else {
+            if (extension.getIosSignIdentity() != null) {
+                String iosSignIdentity = extension.getIosSignIdentity();
 
-            getLogger().debug("Using explicit iOS Signing identity: " + iosSignIdentity);
-            builder.iosSignIdentity(SigningIdentity.find(SigningIdentity.list(), iosSignIdentity));
-        }
+                getLogger().debug("Using explicit iOS Signing identity: " + iosSignIdentity);
+                builder.iosSignIdentity(SigningIdentity.find(SigningIdentity.list(), iosSignIdentity));
+            }
 
-        if (extension.getIosProvisioningProfile() != null) {
-            String iosProvisioningProfile = extension.getIosProvisioningProfile();
+            if (extension.getIosProvisioningProfile() != null) {
+                String iosProvisioningProfile = extension.getIosProvisioningProfile();
 
-            getLogger().debug("Using explicit iOS provisioning profile: " + iosProvisioningProfile);
-            builder.iosProvisioningProfile(ProvisioningProfile.find(ProvisioningProfile.list(), iosProvisioningProfile));
+                getLogger().debug("Using explicit iOS provisioning profile: " + iosProvisioningProfile);
+                builder.iosProvisioningProfile(ProvisioningProfile.find(ProvisioningProfile.list(), iosProvisioningProfile));
+            }
         }
 
         builder.clearClasspathEntries();

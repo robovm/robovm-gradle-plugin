@@ -34,7 +34,7 @@ import static org.junit.Assert.*
  * @author Junji Takakura
  */
 class RoboVMPluginTest {
-    
+
     private Project project;
 
     public RoboVMPluginTest() {
@@ -58,7 +58,7 @@ class RoboVMPluginTest {
     @After
     public void tearDown() {
     }
-    
+
     @Test
     public void testGetPropertiesFile() {
         String expected = "/home/test/test.properties";
@@ -69,7 +69,7 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.propertiesFile)
     }
-    
+
     @Test
     public void testGetConfigFile() {
         String expected = "/home/test/test.xml";
@@ -80,7 +80,7 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.configFile)
     }
-    
+
     @Test
     public void testGetIosSignIdentity() {
         String expected = "signIdentity";
@@ -91,7 +91,7 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.iosSignIdentity)
     }
-    
+
     @Test
     public void testGetIosProvisioningProfile() {
         String expected = "provisioningProfile";
@@ -102,7 +102,7 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.iosProvisioningProfile)
     }
-    
+
     @Test
     public void testGetIosSimulatorSdk() {
         String expected = "iosSimulatorSdk";
@@ -113,7 +113,18 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.iosSimulatorSdk)
     }
-    
+
+    @Test
+    public void testIsIosSkipSigning() {
+        boolean expected = true;
+
+        project.robovm {
+            iosSkipSigning expected
+        }
+
+        assertEquals(expected, project.robovm.iosSkipSigning)
+    }
+
     @Test
     public void testGetTaskByNameLaunchIPhoneSimulator() {
         assertTrue(project.tasks.launchIPhoneSimulator instanceof IPhoneSimulatorTask);
