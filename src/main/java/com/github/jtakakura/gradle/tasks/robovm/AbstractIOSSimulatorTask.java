@@ -15,6 +15,7 @@
  */
 package com.github.jtakakura.gradle.tasks.robovm;
 
+import java.io.File;
 import java.io.IOException;
 import org.gradle.api.GradleException;
 import org.robovm.compiler.config.Arch;
@@ -32,13 +33,49 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
     protected void launch(IOSSimulatorLaunchParameters.Family targetFamily) {
         try {
             Config config = build(OS.ios, Arch.x86, TargetType.ios);
+
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
             launchParameters.setFamily(targetFamily);
             launchParameters.setSdk(extension.getIosSimulatorSdk());
+
+            if (extension.getStdoutFifo() != null) {
+                File stdoutFifo = new File(extension.getStdoutFifo());
+                boolean isWritable;
+
+                if (stdoutFifo.exists()) {
+                    isWritable = stdoutFifo.isFile() && stdoutFifo.canWrite();
+                } else {
+                    File parent = stdoutFifo.getParentFile();
+                    isWritable = parent != null && parent.isDirectory() && parent.canWrite();
+                }
+
+                if (!isWritable) {
+                    throw new GradleException("Unwritable 'stdoutFifo' specified for RoboVM compile: " + stdoutFifo);
+                }
+
+                launchParameters.setStdoutFifo(stdoutFifo);
+            }
+
+            if (extension.getStderrFifo() != null) {
+                File stderrFifo = new File(extension.getStderrFifo());
+                boolean isWritable;
+
+                if (stderrFifo.exists()) {
+                    isWritable = stderrFifo.isFile() && stderrFifo.canWrite();
+                } else {
+                    File parent = stderrFifo.getParentFile();
+                    isWritable = parent != null && parent.isDirectory() && parent.canWrite();
+                }
+
+                if (!isWritable) {
+                    throw new GradleException("Unwritable 'stderrFifo' specified for RoboVM compile: " + stderrFifo);
+                }
+
+                launchParameters.setStderrFifo(stderrFifo);
+            }
+
             config.getTarget().launch(launchParameters).waitFor();
-        } catch (InterruptedException e) {
-            throw new GradleException("Failed to launch IOS Simulator", e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new GradleException("Failed to launch IOS Simulator", e);
         }
     }

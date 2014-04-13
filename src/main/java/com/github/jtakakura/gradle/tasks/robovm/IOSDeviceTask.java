@@ -35,9 +35,7 @@ public class IOSDeviceTask extends AbstractRoboVMTask {
             Config config = build(OS.ios, Arch.thumbv7, TargetType.ios);
             LaunchParameters launchParameters = config.getTarget().createLaunchParameters();
             config.getTarget().launch(launchParameters).waitFor();
-        } catch (InterruptedException e) {
-            throw new GradleException("Failed to launch IOS Device", e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new GradleException("Failed to launch IOS Device", e);
         }
     }

@@ -30,6 +30,8 @@ public class RoboVMPluginExtension {
     private String iosSignIdentity;
     private String iosProvisioningProfile;
     private String iosSimulatorSdk;
+    private String stdoutFifo;
+    private String stderrFifo;
     private boolean iosSkipSigning = false;
 
     public RoboVMPluginExtension(Project project) {
@@ -80,6 +82,22 @@ public class RoboVMPluginExtension {
         this.iosSimulatorSdk = iosSimulatorSdk;
     }
 
+    public String getStdoutFifo() {
+        return stdoutFifo;
+    }
+
+    public void setStdoutFifo(String stdoutFifo) {
+        this.stdoutFifo = stdoutFifo;
+    }
+
+    public String getStderrFifo() {
+        return stderrFifo;
+    }
+
+    public void setStderrFifo(String stderrFifo) {
+        this.stderrFifo = stderrFifo;
+    }
+
     public boolean isIosSkipSigning() {
         return iosSkipSigning;
     }
@@ -87,5 +105,4 @@ public class RoboVMPluginExtension {
     public void setIosSkipSigning(boolean iosSkipSigning) {
         this.iosSkipSigning = iosSkipSigning;
     }
-
 }

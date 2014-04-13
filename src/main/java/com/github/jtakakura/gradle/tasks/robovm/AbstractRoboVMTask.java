@@ -312,7 +312,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     }
 
     private List<RemoteRepository> createRemoteRepositories() {
-        List<RemoteRepository> repositories = new ArrayList<RemoteRepository>();
+        List<RemoteRepository> repositories = new ArrayList<>();
         repositories.add(new RemoteRepository("maven-central", "default", "http://repo1.maven.org/maven2/"));
 
         return repositories;
