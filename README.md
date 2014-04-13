@@ -29,6 +29,8 @@ robovm {
     iosSignIdentity = ""
     iosProvisioningProfile = ""
     iosSkipSigning = false
+    stdoutFifo = ""
+    stderrFifo = ""
 }
 ```
 

@@ -113,6 +113,28 @@ class RoboVMPluginTest {
 
         assertEquals(expected, project.robovm.iosSimulatorSdk)
     }
+    
+    @Test
+    public void testGetStdoutFifo() {
+        String expected = "/tmp/stdout.log";
+
+        project.robovm {
+            stdoutFifo expected
+        }
+
+        assertEquals(expected, project.robovm.stdoutFifo)
+    }
+    
+    @Test
+    public void testGetStderrFifo() {
+        String expected = "/tmp/stderr.log";
+
+        project.robovm {
+            stderrFifo expected
+        }
+
+        assertEquals(expected, project.robovm.stderrFifo)
+    }
 
     @Test
     public void testIsIosSkipSigning() {
