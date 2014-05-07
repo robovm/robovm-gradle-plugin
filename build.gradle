@@ -1,7 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
-apply plugin: 'signing'
 
 group = 'com.github.jtakakura'
 archivesBaseName = 'gradle-robovm-plugin'
@@ -25,62 +24,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
-task sourcesJar(type: Jar, dependsOn:classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn:javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-signing {
-    required = { gradle.taskGraph.hasTask(uploadArchives) && !version.endsWith("SNAPSHOT") }
-    sign configurations.archives
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            pom.project {
-                name 'Gradle RoboVM Plugin'
-                packaging 'jar'
-                description 'The Gradle RoboVM Plugin provides a way to build RoboVM based distribution bundles.'
-                url 'https://github.com/jtakakura/gradle-robovm-plugin'
-                scm {
-                    url 'git@github.com:jtakakura/gradle-robovm-plugin.git'
-                    connection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
-                    developerConnection 'scm:git:git@github.com:jtakakura/gradle-robovm-plugin.git'
-                }
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-                developers {
-                    developer {
-                        id sonatypeUsername
-                        name sonatypeFullname
-                    }
-                }
-            }
-        }
-    }
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion = '1.10'
 }
+
+// apply from: 'publish.gradle'
