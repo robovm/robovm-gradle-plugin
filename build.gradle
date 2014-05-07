@@ -5,13 +5,13 @@ apply plugin: 'signing'
 
 group = 'com.github.jtakakura'
 archivesBaseName = 'gradle-robovm-plugin'
-version = '0.0.7'
+version = '0.0.8'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-    roboVMVersion = "0.0.11"
+    roboVMVersion = "0.0.12"
 }
 
 repositories {
