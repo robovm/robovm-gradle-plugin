@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
@@ -140,6 +141,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         File installDirectory = new File(project.getBuildDir(), "robovm");
         File temporaryDirectory = new File(new File(installDirectory, os.name()), arch.name());
+        try {
+            FileUtils.deleteDirectory(temporaryDirectory);
+        } catch (IOException e) {
+            throw new GradleException("Failed to clean output dir " + temporaryDirectory, e);
+        }
+        temporaryDirectory.mkdirs();
 
         builder.home(new Config.Home(unpack()))
                 .logger(getRoboVMLogger())
