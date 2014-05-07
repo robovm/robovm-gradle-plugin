@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.6'
+        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.8'
     }
 }
 
