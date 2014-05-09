@@ -10,18 +10,25 @@ To use the RoboVM plugin, include in your build script:
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.8'
+        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.9-SNAPSHOT'
     }
 }
 
 // Apply the plugin
 apply plugin: 'robovm'
 
+repositories {
+    mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
 ext {
     // Configure your application main class
     mainClassName = "org.robovm.sample.ios.RoboVMSampleIOSApp"
+    roboVMVersion = "0.0.13-SNAPSHOT"
 }
 
 robovm {
