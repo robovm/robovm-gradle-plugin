@@ -321,6 +321,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     private List<RemoteRepository> createRemoteRepositories() {
         List<RemoteRepository> repositories = new ArrayList<>();
         repositories.add(new RemoteRepository("maven-central", "default", "http://repo1.maven.org/maven2/"));
+        repositories.add(new RemoteRepository("oss.sonatype.org-snapshots", "default", "https://oss.sonatype.org/content/repositories/snapshots/"));
 
         return repositories;
     }
@@ -329,7 +330,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         @Override
         public Wagon lookup(String roleHint) throws Exception {
-            if ("http".equals(roleHint)) {
+            if ("http".equals(roleHint) || "https".equals(roleHint)) {
                 return new HttpWagon();
             }
 
