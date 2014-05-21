@@ -4,13 +4,13 @@ apply plugin: 'maven'
 
 group = 'com.github.jtakakura'
 archivesBaseName = 'gradle-robovm-plugin'
-version = '0.0.9-SNAPSHOT'
+version = '0.0.9'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-    roboVMVersion = "0.0.13-SNAPSHOT"
+    roboVMVersion = "0.0.13"
 }
 
 repositories {
