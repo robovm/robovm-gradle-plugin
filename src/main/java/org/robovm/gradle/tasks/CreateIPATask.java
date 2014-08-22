@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
 import java.io.IOException;
 import org.gradle.api.GradleException;

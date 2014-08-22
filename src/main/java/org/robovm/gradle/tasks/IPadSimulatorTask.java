@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
 import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
 
@@ -21,10 +21,10 @@ import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
  *
  * @author Junji Takakura
  */
-public class IPhoneSimulatorTask extends AbstractIOSSimulatorTask {
+public class IPadSimulatorTask extends AbstractIOSSimulatorTask {
 
     @Override
     public void invoke() {
-        launch(IOSSimulatorLaunchParameters.Family.iPhoneRetina4Inch);
+        launch(IOSSimulatorLaunchParameters.Family.iPadRetina);
     }
 }

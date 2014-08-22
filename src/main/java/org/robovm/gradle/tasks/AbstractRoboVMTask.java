@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
-import com.github.jtakakura.gradle.plugins.robovm.RoboVMPlugin;
-import com.github.jtakakura.gradle.plugins.robovm.RoboVMPluginExtension;
+import org.robovm.gradle.RoboVMPlugin;
+import org.robovm.gradle.RoboVMPluginExtension;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
