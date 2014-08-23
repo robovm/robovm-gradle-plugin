@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 the original author or authors.
+ * Copyright (C) 2014 Trillian Mobile AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
-import com.github.jtakakura.gradle.plugins.robovm.RoboVMPlugin;
-import com.github.jtakakura.gradle.plugins.robovm.RoboVMPluginExtension;
+import org.robovm.gradle.RoboVMPlugin;
+import org.robovm.gradle.RoboVMPluginExtension;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

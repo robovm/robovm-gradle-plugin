@@ -2,9 +2,9 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-group = 'com.github.jtakakura'
+group = 'org.robovm'
 archivesBaseName = 'gradle-robovm-plugin'
-version = '0.0.11-SNAPSHOT'
+version = '0.0.15-SNAPSHOT'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -29,5 +29,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-// apply from: 'publish.gradle'
 // apply from: 'local.gradle'

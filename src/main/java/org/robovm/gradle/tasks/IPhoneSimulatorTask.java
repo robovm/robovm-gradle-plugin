@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 the original author or authors.
+ * Copyright (C) 2014 Trillian Mobile AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
 import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
 
@@ -21,10 +21,10 @@ import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
  *
  * @author Junji Takakura
  */
-public class IPadSimulatorTask extends AbstractIOSSimulatorTask {
+public class IPhoneSimulatorTask extends AbstractIOSSimulatorTask {
 
     @Override
     public void invoke() {
-        launch(IOSSimulatorLaunchParameters.Family.iPadRetina);
+        launch(IOSSimulatorLaunchParameters.Family.iPhoneRetina4Inch);
     }
 }

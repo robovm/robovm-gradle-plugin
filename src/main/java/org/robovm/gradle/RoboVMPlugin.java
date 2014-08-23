@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 the original author or authors.
+ * Copyright (C) 2014 Trillian Mobile AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.plugins.robovm;
+package org.robovm.gradle;
 
-import com.github.jtakakura.gradle.tasks.robovm.CreateIPATask;
-import com.github.jtakakura.gradle.tasks.robovm.IOSDeviceTask;
-import com.github.jtakakura.gradle.tasks.robovm.IPadSimulatorTask;
-import com.github.jtakakura.gradle.tasks.robovm.IPhoneSimulatorTask;
+import org.robovm.gradle.tasks.CreateIPATask;
+import org.robovm.gradle.tasks.IOSDeviceTask;
+import org.robovm.gradle.tasks.IPadSimulatorTask;
+import org.robovm.gradle.tasks.IPhoneSimulatorTask;
 import java.util.HashMap;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

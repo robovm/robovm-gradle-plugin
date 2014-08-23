@@ -13,7 +13,7 @@ buildscript {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.11-SNAPSHOT'
+        classpath 'org.robovm:gradle-robovm-plugin:0.0.15-SNAPSHOT'
     }
 }
 

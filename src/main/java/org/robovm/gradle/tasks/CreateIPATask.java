@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 the original author or authors.
+ * Copyright (C) 2014 Trillian Mobile AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtakakura.gradle.tasks.robovm;
+package org.robovm.gradle.tasks;
 
 import java.io.IOException;
 import org.gradle.api.GradleException;
@@ -21,22 +21,22 @@ import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
-import org.robovm.compiler.target.LaunchParameters;
+import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
  *
  * @author Junji Takakura
  */
-public class IOSDeviceTask extends AbstractRoboVMTask {
+public class CreateIPATask extends AbstractRoboVMTask {
 
     @Override
     public void invoke() {
         try {
-            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios);
-            LaunchParameters launchParameters = config.getTarget().createLaunchParameters();
-            config.getTarget().launch(launchParameters).waitFor();
-        } catch (InterruptedException | IOException e) {
-            throw new GradleException("Failed to launch IOS Device", e);
+            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios, false);
+            IOSTarget target = (IOSTarget) config.getTarget();
+            target.createIpa();
+        } catch (IOException e) {
+            throw new GradleException("Failed to create IPA", e);
         }
     }
 }
