@@ -1,6 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'nexus'
 
 group = 'org.robovm'
 archivesBaseName = 'robovm-gradle-plugin'
@@ -23,6 +34,41 @@ dependencies {
     compile localGroovy()
     compile "org.robovm:robovm-dist-compiler:${roboVMVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+modifyPom {
+    project {
+       name 'RoboVM Gradle Plugin'
+       packaging 'jar'
+       description 'The RoboVM Gradle Plugin provides a way to build RoboVM apps using Gradle.'
+       url 'http://www.robovm.com/'
+       inceptionYear '2013'
+
+       scm {
+           url 'https://github.com/robovm/robovm-gradle-plugin.git'
+           connection 'scm:git:git://github.com/robovm/robovm-gradle-plugin.git'
+           developerConnection 'scm:git:git@github.com:robovm/robovm-gradle-plugin.git'
+       }
+
+       licenses {
+           license {
+               name 'The Apache Software License, Version 2.0'
+               url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+               distribution 'repo'
+           }
+       }
+
+       developers {
+           developer {
+               id 'jtakakura'
+               name 'Junji Takakura'
+           }
+           developer {
+               id 'ntherning'
+               name 'Niklas Therning'
+           }
+       }
+    }
 }
 
 task wrapper(type: Wrapper) {
