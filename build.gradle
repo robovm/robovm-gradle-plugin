@@ -4,13 +4,13 @@ apply plugin: 'maven'
 
 group = 'org.robovm'
 archivesBaseName = 'robovm-gradle-plugin'
-version = '0.0.15-SNAPSHOT'
+version = '1.0.0-alpha-01'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-    roboVMVersion = "0.0.15-SNAPSHOT"
+    roboVMVersion = "1.0.0-alpha-01"
 }
 
 repositories {

@@ -12,7 +12,7 @@ buildscript {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'org.robovm:robovm-gradle-plugin:0.0.15-SNAPSHOT'
+        classpath 'org.robovm:robovm-gradle-plugin:1.0.0-alpha-01'
     }
 }
 
@@ -27,7 +27,7 @@ repositories {
 ext {
     // Configure your application main class
     mainClassName = "org.robovm.sample.ios.RoboVMSampleIOSApp"
-    roboVMVersion = "0.0.15-SNAPSHOT"
+    roboVMVersion = "1.0.0-alpha-01"
 }
 
 robovm {
