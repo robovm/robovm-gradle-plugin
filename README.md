@@ -1,6 +1,5 @@
-gradle-robovm-plugin
-====================
 RoboVM Gradle plugin
+====================
 
 # Usage
 To use the RoboVM plugin, include in your build script:
@@ -13,7 +12,7 @@ buildscript {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'org.robovm:gradle-robovm-plugin:0.0.15-SNAPSHOT'
+        classpath 'org.robovm:robovm-gradle-plugin:0.0.15-SNAPSHOT'
     }
 }
 
