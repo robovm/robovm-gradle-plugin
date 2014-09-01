@@ -82,12 +82,6 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         Config.Builder builder = new Config.Builder();
 
-        if (!project.hasProperty("mainClassName")) {
-            throw new GradleException("No main class specified");
-        }
-
-        String mainClass = (String) project.property("mainClassName");
-
         if (extension.getPropertiesFile() != null) {
             File propertiesFile = new File(extension.getPropertiesFile());
 
@@ -154,9 +148,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 .targetType(targetType)
                 .skipInstall(skipInstall)
                 .installDir(installDirectory)
-                .mainClass(mainClass)
                 .os(os)
                 .arch(arch);
+
+        if (project.hasProperty("mainClassName")) {
+            builder.mainClass((String) project.property("mainClassName"));
+        }
 
         if (extension.isIosSkipSigning()) {
             builder.iosSkipSigning(true);
