@@ -80,7 +80,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     public Config build(OS os, Arch arch, TargetType targetType, boolean skipInstall) {
         getLogger().info("Building RoboVM app for: " + os + " (" + arch + ")");
 
-        Config.Builder builder = new Config.Builder();
+        Config.Builder builder;
+        try {
+            builder = new Config.Builder();
+        } catch (IOException e) {
+            throw new GradleException(e.getMessage(), e);
+        }
 
         if (extension.getPropertiesFile() != null) {
             File propertiesFile = new File(extension.getPropertiesFile());
