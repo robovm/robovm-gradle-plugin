@@ -17,11 +17,13 @@ package org.robovm.gradle.tasks;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.gradle.api.GradleException;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
+import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
 
 /**
@@ -30,13 +32,12 @@ import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
  */
 abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
 
-    protected void launch(IOSSimulatorLaunchParameters.Family targetFamily) {
+    protected void launch(DeviceType type) {
         try {
             Config config = build(OS.ios, Arch.x86, TargetType.ios);
 
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
-            launchParameters.setFamily(targetFamily);
-            launchParameters.setSdk(extension.getIosSimulatorSdk());
+            launchParameters.setDeviceType(type);
 
             if (extension.getStdoutFifo() != null) {
                 File stdoutFifo = new File(extension.getStdoutFifo());

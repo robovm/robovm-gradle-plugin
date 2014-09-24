@@ -15,7 +15,10 @@
  */
 package org.robovm.gradle.tasks;
 
-import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
+import org.robovm.compiler.config.Config;
+import org.robovm.compiler.config.Config.Home;
+import org.robovm.compiler.target.ios.DeviceType;
+import org.robovm.compiler.target.ios.DeviceType.DeviceFamily;
 
 /**
  *
@@ -25,6 +28,7 @@ public class IPhoneSimulatorTask extends AbstractIOSSimulatorTask {
 
     @Override
     public void invoke() {
-        launch(IOSSimulatorLaunchParameters.Family.iPhoneRetina4Inch);
+        Home home = new Config.Home(unpack());
+        launch(DeviceType.getBestDeviceType(home, DeviceFamily.iPhone));
     }
 }
