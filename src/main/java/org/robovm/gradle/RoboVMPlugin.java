@@ -23,6 +23,10 @@ import java.util.HashMap;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.robovm.compiler.Version;
+import java.util.List;
+import org.robovm.compiler.target.ios.DeviceType;
+import org.robovm.compiler.config.Config.Home;
+import org.robovm.gradle.tasks.AbstractRoboVMTask;
 
 /**
  * Gradle plugin that extends the Java plugin for RoboVM development.
@@ -31,12 +35,19 @@ import org.robovm.compiler.Version;
  */
 public class RoboVMPlugin implements Plugin<Project> {
 
+	private static String iDeviceTypes [] = {
+							"iPhone-4s", "iPhone-5", "iPhone-5s",
+							"iPad-2", "iPad-Retina", "iPad-Air",
+							"iPhone-6-Plus", "iPhone-6", "Resizable-iPhone",
+							"Resizable-iPad"
+						};
+
     public static String getRoboVMVersion() {
         return Version.getVersion();
     }
 
     @Override
-    public void apply(Project project) {
+    public void apply(final Project project) {
         project.getExtensions().create(RoboVMPluginExtension.NAME, RoboVMPluginExtension.class, project);
         project.task(new HashMap<String, Object>() {
             {
@@ -58,5 +69,24 @@ public class RoboVMPlugin implements Plugin<Project> {
                 put("type", CreateIPATask.class);
             }
         }, "createIPA");
+
+		for (int i=0; i<iDeviceTypes.length; i++) {
+			final String deviceName = iDeviceTypes[i];
+			if (deviceName.contains("iPhone")){
+				project.task(new HashMap<String, Object>() {
+					{
+						put("type",IPhoneSimulatorTask.class);
+						put("description",deviceName);
+					}
+				}, "launch" + deviceName + "Simulator");
+			} else if (deviceName.contains("iPad")) {
+				project.task(new HashMap<String, Object>() {
+					{
+						put("type",IPadSimulatorTask.class);
+						put("description",deviceName);
+					}
+				}, "launch" + deviceName + "Simulator");
+			}
+		}
     }
 }
