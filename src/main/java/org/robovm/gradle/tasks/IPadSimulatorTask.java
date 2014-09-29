@@ -19,6 +19,7 @@ import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.Config.Home;
 import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.DeviceType.DeviceFamily;
+import java.util.List;
 
 /**
  *
@@ -26,9 +27,27 @@ import org.robovm.compiler.target.ios.DeviceType.DeviceFamily;
  */
 public class IPadSimulatorTask extends AbstractIOSSimulatorTask {
 
+	Home home;
+
     @Override
     public void invoke() {
-        Home home = new Config.Home(unpack());
-        launch(DeviceType.getBestDeviceType(home, DeviceFamily.iPad));
+        home = new Config.Home(unpack());
+
+		String device = getDescription();
+		if (device != null) {
+			invoke(device);
+		} else {
+			launch(DeviceType.getBestDeviceType(home, DeviceFamily.iPad));
+		}
     }
+
+	public void invoke (String deviceId) {
+		List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
+		for (DeviceType d : deviceTypes) {
+			if (d.getDeviceName().endsWith(deviceId)){
+				launch(d);
+				break;
+			}
+		}
+	}
 }
