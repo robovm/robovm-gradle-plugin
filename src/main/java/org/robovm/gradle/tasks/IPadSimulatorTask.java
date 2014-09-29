@@ -20,6 +20,7 @@ import org.robovm.compiler.config.Config.Home;
 import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.DeviceType.DeviceFamily;
 import java.util.List;
+import java.util.Collections;
 
 /**
  *
@@ -42,12 +43,29 @@ public class IPadSimulatorTask extends AbstractIOSSimulatorTask {
     }
 
 	public void invoke (String deviceId) {
+		DeviceType deviceType = getLatestDevice(home, deviceId);
+		if (deviceType != null) {
+			launch(deviceType);
+		} else {
+			System.err.println("Simulator: " + deviceId + " not available on this platform");
+		}
+	}
+
+	private DeviceType getLatestDevice(Home home, String deviceId) {
+		DeviceType latestDeviceType = null;
 		List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
-		for (DeviceType d : deviceTypes) {
-			if (d.getDeviceName().endsWith(deviceId)){
-				launch(d);
-				break;
+
+		for (DeviceType deviceType: deviceTypes) {
+			if (deviceType.getDeviceName().endsWith(deviceId)) {
+				if (latestDeviceType != null) {
+					if (deviceType.getSdk().getMajor() > latestDeviceType.getSdk().getMajor()){
+						latestDeviceType = deviceType;
+					}
+				} else {
+					latestDeviceType = deviceType;
+				}
 			}
 		}
+		return latestDeviceType;
 	}
 }

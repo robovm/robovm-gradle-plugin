@@ -41,11 +41,29 @@ public class IPhoneSimulatorTask extends AbstractIOSSimulatorTask {
     }
 
 	public void invoke (String deviceId) {
+		DeviceType deviceType = getLatestDevice(home, deviceId);
+		if (deviceType != null) {
+			launch(deviceType);
+		} else {
+			System.err.println("Simulator: " + deviceId + " not available on this platform");
+		}
+	}
+
+	private DeviceType getLatestDevice(Home home, String deviceId) {
+		DeviceType latestDeviceType = null;
 		List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
-		for (DeviceType d : deviceTypes) {
-			if (d.getDeviceName().endsWith(deviceId)){
-				launch(d);
+
+		for (DeviceType deviceType: deviceTypes) {
+			if (deviceType.getDeviceName().endsWith(deviceId)) {
+				if (latestDeviceType != null) {
+					if (deviceType.getSdk().getMajor() > latestDeviceType.getSdk().getMajor()){
+						latestDeviceType = deviceType;
+					}
+				} else {
+					latestDeviceType = deviceType;
+				}
 			}
 		}
+		return latestDeviceType;
 	}
 }
