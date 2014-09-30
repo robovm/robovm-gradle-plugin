@@ -17,6 +17,7 @@ package org.robovm.gradle.tasks;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.gradle.api.GradleException;
 import org.robovm.compiler.config.Arch;
@@ -25,6 +26,7 @@ import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
+import org.robovm.compiler.target.ios.SDK;
 
 /**
  *
@@ -79,5 +81,87 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
         } catch (InterruptedException | IOException e) {
             throw new GradleException("Failed to launch IOS Simulator", e);
         }
+    }
+
+    protected DeviceType getDeviceType(Config.Home home, DeviceType.DeviceFamily family) {
+        DeviceType deviceType;
+
+        if (project.hasProperty("deviceName") || project.hasProperty("sdkVersion")) {
+            String deviceName = getDeviceName(home, family);
+            String sdkVersion = getSDKVersion();
+            String deviceTypeId = deviceName + ", " + sdkVersion;
+
+            deviceType = DeviceType.getDeviceType(home, deviceTypeId);
+
+            if (deviceType == null) {
+                throw new GradleException("Specified deviceName and sdkVersion are invalid: " + deviceTypeId);
+            }
+        } else {
+            deviceType = DeviceType.getBestDeviceType(home, family);
+        }
+
+        return deviceType;
+    }
+
+    private String getDeviceName(Config.Home home, DeviceType.DeviceFamily family) {
+        String deviceName = null;
+        List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
+
+        if (deviceTypes.size() > 0) {
+            if (project.hasProperty("deviceName")) {
+                String name = (String) project.getProperties().get("deviceName");
+
+                for (DeviceType deviceType : deviceTypes) {
+                    if (deviceType.getSimpleDeviceName().equals(name) && deviceType.getFamily().equals(family)) {
+                        deviceName = deviceType.getSimpleDeviceName();
+                        break;
+                    }
+                }
+
+                if (deviceName == null) {
+                    throw new GradleException("Specified deviceName is invalid: " + name);
+                }
+            } else {
+                deviceName = deviceTypes.get(0).getSimpleDeviceName();
+            }
+        }
+
+        return deviceName;
+    }
+
+    private String getSDKVersion() {
+        String sdkVersion = null;
+        List<SDK> sdks = SDK.listSimulatorSDKs();
+
+        if (sdks.size() > 0) {
+            if (project.hasProperty("sdkVersion")) {
+                String version = (String) project.getProperties().get("sdkVersion");
+
+                for (SDK sdk : sdks) {
+                    if (sdk.getVersion().equals(version)) {
+                        sdkVersion = version;
+                        break;
+                    }
+                }
+
+                if (sdkVersion == null) {
+                    throw new GradleException("Specified sdkVersion is invalid: " + version);
+                }
+            } else {
+                SDK latestSdk = null;
+
+                for (SDK sdk : SDK.listSimulatorSDKs()) {
+                    if (latestSdk == null || ((sdk.getMajor() << 8) | (sdk.getMinor())) > ((latestSdk.getMajor() << 8) | (latestSdk.getMinor()))) {
+                        latestSdk = sdk;
+                    }
+                }
+
+                if (latestSdk != null) {
+                    sdkVersion = latestSdk.getVersion();
+                }
+            }
+        }
+
+        return sdkVersion;
     }
 }
