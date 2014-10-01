@@ -86,7 +86,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
     protected DeviceType getDeviceType(Config.Home home, DeviceType.DeviceFamily family) {
         DeviceType deviceType;
 
-        if (project.hasProperty("deviceName") || project.hasProperty("sdkVersion")) {
+        if (project.hasProperty("robovm.deviceName") || project.hasProperty("robovm.sdkVersion")) {
             String deviceName = getDeviceName(home, family);
             String sdkVersion = getSDKVersion();
             String deviceTypeId = deviceName + ", " + sdkVersion;
@@ -94,7 +94,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
             deviceType = DeviceType.getDeviceType(home, deviceTypeId);
 
             if (deviceType == null) {
-                throw new GradleException("Specified deviceName and sdkVersion are invalid: " + deviceTypeId);
+                throw new GradleException("Specified robovm.deviceName and robovm.sdkVersion are invalid: " + deviceTypeId);
             }
         } else {
             deviceType = DeviceType.getBestDeviceType(home, family);
@@ -108,8 +108,8 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
         List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
 
         if (deviceTypes.size() > 0) {
-            if (project.hasProperty("deviceName")) {
-                String name = (String) project.getProperties().get("deviceName");
+            if (project.hasProperty("robovm.deviceName")) {
+                String name = (String) project.getProperties().get("robovm.deviceName");
 
                 for (DeviceType deviceType : deviceTypes) {
                     if (deviceType.getSimpleDeviceName().equals(name) && deviceType.getFamily().equals(family)) {
@@ -119,7 +119,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
                 }
 
                 if (deviceName == null) {
-                    throw new GradleException("Specified deviceName is invalid: " + name);
+                    throw new GradleException("Specified robovm.deviceName is invalid: " + name);
                 }
             } else {
                 deviceName = deviceTypes.get(0).getSimpleDeviceName();
@@ -134,8 +134,8 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
         List<SDK> sdks = SDK.listSimulatorSDKs();
 
         if (sdks.size() > 0) {
-            if (project.hasProperty("sdkVersion")) {
-                String version = (String) project.getProperties().get("sdkVersion");
+            if (project.hasProperty("robovm.sdkVersion")) {
+                String version = (String) project.getProperties().get("robovm.sdkVersion");
 
                 for (SDK sdk : sdks) {
                     if (sdk.getVersion().equals(version)) {
@@ -145,7 +145,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
                 }
 
                 if (sdkVersion == null) {
-                    throw new GradleException("Specified sdkVersion is invalid: " + version);
+                    throw new GradleException("Specified robovm.sdkVersion is invalid: " + version);
                 }
             } else {
                 SDK latestSdk = null;
