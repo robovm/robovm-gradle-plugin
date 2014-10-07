@@ -48,3 +48,20 @@ The RoboVM plugin defines the following tasks:
 * `launchIPadSimulator`: Runs Your iOS App in the iPad Simulator.
 * `launchIOSDevice`: Runs Your iOS App in the iOS Device.
 * `createIPA`: Creates .ipa file.
+
+## Project properties
+
+The iOS Simulator launcher properties can be set by project properties via `gradle.properties` or `-P` command line parameter:
+
+* `robovm.device.name`: Set the device name property.
+ * iPhone-4s: iPhone 4S
+ * iPhone-5: iPhone 5
+ * iPhone-5s: iPhone 5S
+ * iPhone-6: iPhone 6
+ * iPhone-6-Plus: iPhone 6 Plus
+ * iPad-2: iPad 2
+ * iPad-Retina: iPad Retina
+ * iPad-Air: iPad Air
+ * Resizable-iPhone: Resizable iPhone
+ * Resizable-iPad: Resizable iPad
+* `robovm.sdk.version`: Set the sdk version property.
