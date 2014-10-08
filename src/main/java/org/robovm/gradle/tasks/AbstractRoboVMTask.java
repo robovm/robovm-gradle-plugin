@@ -34,6 +34,7 @@ import org.gradle.mvn3.org.apache.maven.wagon.Wagon;
 import org.gradle.mvn3.org.apache.maven.wagon.providers.http.HttpWagon;
 import org.gradle.mvn3.org.sonatype.aether.RepositorySystem;
 import org.gradle.mvn3.org.sonatype.aether.RepositorySystemSession;
+import org.gradle.mvn3.org.sonatype.aether.artifact.Artifact;
 import org.gradle.mvn3.org.sonatype.aether.connector.wagon.WagonProvider;
 import org.gradle.mvn3.org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.gradle.mvn3.org.sonatype.aether.repository.LocalRepository;
@@ -216,9 +217,18 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     abstract public void invoke();
 
     protected File unpack() throws GradleException {
-        final File distTarFile = resolveArtifact("org.robovm:robovm-dist:tar.gz:nocompiler:" + RoboVMPlugin.getRoboVMVersion());
+        final Artifact artifact = resolveArtifact("org.robovm:robovm-dist:tar.gz:nocompiler:" + RoboVMPlugin.getRoboVMVersion());
+        final File distTarFile = artifact.getFile();
         final File unpackedDirectory = new File(distTarFile.getParent(), "unpacked");
         final File unpackedDistDirectory = new File(unpackedDirectory, "robovm-" + RoboVMPlugin.getRoboVMVersion());
+
+        if (unpackedDirectory.exists() && artifact.isSnapshot()) {
+            getAnt().invokeMethod("delete", new HashMap<String, Object>() {
+                {
+                    put("dir", unpackedDirectory.getAbsolutePath());
+                }
+            });
+        }
 
         if (unpackedDirectory.exists()) {
             getLogger().debug("Archive '" + distTarFile + "' was already unpacked in: " + unpackedDirectory);
@@ -255,7 +265,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         return unpackedDistDirectory;
     }
 
-    protected File resolveArtifact(String artifactLocator) throws GradleException {
+    protected Artifact resolveArtifact(String artifactLocator) throws GradleException {
         ArtifactRequest request = new ArtifactRequest();
         DefaultArtifact artifact = new DefaultArtifact(artifactLocator);
         request.setArtifact(artifact);
@@ -273,7 +283,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         getLogger().debug("Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from " + result.getRepository());
 
-        return result.getArtifact().getFile();
+        return result.getArtifact();
     }
 
     protected Logger getRoboVMLogger() {
