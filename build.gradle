@@ -15,13 +15,13 @@ apply plugin: 'nexus'
 
 group = 'org.robovm'
 archivesBaseName = 'robovm-gradle-plugin'
-version = '1.0.0-alpha-04'
+version = '1.0.0-SNAPSHOT'
 
 sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-    roboVMVersion = '1.0.0-alpha-04'
+    roboVMVersion = '1.0.0-SNAPSHOT'
 }
 
 repositories {
