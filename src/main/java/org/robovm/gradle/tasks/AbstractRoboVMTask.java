@@ -74,7 +74,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     }
 
     public Config build(OS os, Arch arch, TargetType targetType) {
-        return build(os, arch, targetType, false);
+        return build(os, arch, targetType, true);
     }
 
     public Config build(OS os, Arch arch, TargetType targetType, boolean skipInstall) {
