@@ -87,6 +87,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         } catch (IOException e) {
             throw new GradleException(e.getMessage(), e);
         }
+        builder.logger(getRoboVMLogger());
 
         if (extension.getPropertiesFile() != null) {
             File propertiesFile = new File(extension.getPropertiesFile());
@@ -101,16 +102,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 throw new GradleException("Failed to add properties file to RoboVM config: " + propertiesFile);
             }
         } else {
-            File file = new File(project.getProjectDir(), "robovm.properties");
-
-            if (file.exists()) {
-                getLogger().debug("Using default properties file: " + file.getAbsolutePath());
-
-                try {
-                    builder.addProperties(file);
-                } catch (IOException e) {
-                    throw new GradleException("Failed to add properties file to RoboVM config: " + file, e);
-                }
+            try {
+                builder.readProjectProperties(project.getProjectDir(), false);
+            } catch (IOException e) {
+                throw new GradleException(
+                        "Failed to read RoboVM project properties file(s) in " 
+                                + project.getProjectDir().getAbsolutePath(), e);
             }
         }
 
@@ -127,15 +124,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 throw new GradleException("Failed to read RoboVM config file: " + configFile);
             }
         } else {
-            File file = new File(project.getProjectDir(), "robovm.xml");
-
-            if (file.exists()) {
-                getLogger().debug("Using default config file: " + file.getAbsolutePath());
-                try {
-                    builder.read(file);
-                } catch (Exception e) {
-                    throw new GradleException("Failed to read RoboVM config file: " + file, e);
-                }
+            try {
+                builder.readProjectConfig(project.getProjectDir(), false);
+            } catch (Exception e) {
+                throw new GradleException(
+                        "Failed to read project RoboVM config file in " 
+                                + project.getProjectDir().getAbsolutePath(), e);
             }
         }
 
@@ -149,7 +143,6 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         temporaryDirectory.mkdirs();
 
         builder.home(new Config.Home(unpack()))
-                .logger(getRoboVMLogger())
                 .tmpDir(temporaryDirectory)
                 .targetType(targetType)
                 .skipInstall(skipInstall)
