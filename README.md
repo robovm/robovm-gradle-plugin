@@ -77,5 +77,5 @@ Make sure to specify a 64-bit capable device type to simulate, e.g. `iPhone-5s`.
 To launch on device in 64-bit mode:
 
 ```
-gradle -Probovm.arch=arm64 --debug launchIOSDevice
+gradle -Probovm.arch=arm64 launchIOSDevice
 ```
