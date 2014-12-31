@@ -65,3 +65,17 @@ The iOS Simulator launcher properties can be set by project properties via `grad
  * Resizable-iPhone: Resizable iPhone
  * Resizable-iPad: Resizable iPad
 * `robovm.sdk.version`: Set the sdk version property.
+
+The arch can be specified using the `gradle.properties` or `-P` command line parameter. To launch on the simulator in 64-bit mode use:
+
+```
+gradle -Probovm.arch=x86_64 -Probovm.device.name=iPhone-5s launchIPhoneSimulator
+```
+
+Make sure to specify a 64-bit capable device type to simulate, e.g. `iPhone-5s`.
+
+To launch on device in 64-bit mode:
+
+```
+gradle -Probovm.arch=arm64 --debug launchIOSDevice
+```

@@ -32,7 +32,12 @@ public class IOSDeviceTask extends AbstractRoboVMTask {
     @Override
     public void invoke() {
         try {
-            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios);
+            Arch arch = Arch.thumbv7;
+            if (extension.getArch() != null && extension.getArch().equals(Arch.arm64.toString())) {
+                arch = Arch.arm64;
+            }
+
+            Config config = build(OS.ios, arch, TargetType.ios);
             LaunchParameters launchParameters = config.getTarget().createLaunchParameters();
             config.getTarget().launch(launchParameters).waitFor();
         } catch (InterruptedException | IOException e) {

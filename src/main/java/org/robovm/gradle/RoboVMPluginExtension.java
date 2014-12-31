@@ -32,6 +32,8 @@ public class RoboVMPluginExtension {
     private String iosSimulatorSdk;
     private String stdoutFifo;
     private String stderrFifo;
+    private String os;
+    private String arch;
     private boolean iosSkipSigning = false;
 
     public RoboVMPluginExtension(Project project) {
@@ -104,5 +106,21 @@ public class RoboVMPluginExtension {
 
     public void setIosSkipSigning(boolean iosSkipSigning) {
         this.iosSkipSigning = iosSkipSigning;
+    }
+
+    public String getOs() {
+        return project.hasProperty("robovm.os") ? project.getProperties().get("robovm.os").toString() : os;
+    }
+
+    public void setOs(String os) {
+        this.os = os;
+    }
+
+    public String getArch() {
+        return project.hasProperty("robovm.arch") ? project.getProperties().get("robovm.arch").toString() : arch;
+    }
+
+    public void setArch(String arch) {
+        this.arch = arch;
     }
 }
