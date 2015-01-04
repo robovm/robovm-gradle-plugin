@@ -12,6 +12,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'nexus'
+apply plugin: 'eclipse'
 
 group = 'org.robovm'
 archivesBaseName = 'robovm-gradle-plugin'
