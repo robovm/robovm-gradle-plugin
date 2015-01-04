@@ -16,10 +16,10 @@
 package org.robovm.gradle.tasks;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.gradle.api.GradleException;
+import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.Config.TargetType;
@@ -41,7 +41,8 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
                 arch = Arch.x86_64;
             }
 
-            Config config = build(OS.ios, arch, TargetType.ios);
+            AppCompiler compiler = build(OS.ios, arch, TargetType.ios);
+            Config config = compiler.getConfig();
 
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
             launchParameters.setDeviceType(type);
@@ -82,9 +83,9 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
                 launchParameters.setStderrFifo(stderrFifo);
             }
 
-            config.getTarget().launch(launchParameters).waitFor();
-        } catch (InterruptedException | IOException e) {
-            throw new GradleException("Failed to launch IOS Simulator", e);
+            compiler.launch(launchParameters);
+        } catch (Throwable t) {
+            throw new GradleException("Failed to launch IOS Simulator", t);
         }
     }
 

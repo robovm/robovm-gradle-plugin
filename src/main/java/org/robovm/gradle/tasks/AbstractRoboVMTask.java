@@ -74,11 +74,11 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         remoteRepositories = createRemoteRepositories();
     }
 
-    public Config build(OS os, Arch arch, TargetType targetType) {
+    public AppCompiler build(OS os, Arch arch, TargetType targetType) {
         return build(os, arch, targetType, true);
     }
 
-    public Config build(OS os, Arch arch, TargetType targetType, boolean skipInstall) {
+    public AppCompiler build(OS os, Arch arch, TargetType targetType, boolean skipInstall) {
         getLogger().info("Building RoboVM app for: " + os + " (" + arch + ")");
 
         Config.Builder builder;
@@ -154,6 +154,13 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
             builder.mainClass((String) project.property("mainClassName"));
         }
 
+        if (extension.isDebug()) {
+            builder.debug(true);
+            if (extension.getDebugPort() != -1) {
+                builder.addPluginArgument("debug:jdwpport=" + extension.getDebugPort());
+            }
+        }
+        
         if (extension.isIosSkipSigning()) {
             builder.iosSkipSigning(true);
         } else {
@@ -199,11 +206,10 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
             AppCompiler compiler = new AppCompiler(config);
             compiler.compile();
             getLogger().info("Compile RoboVM app completed.");
+            return compiler;
         } catch (IOException e) {
             throw new GradleException("Error building RoboVM executable for app", e);
         }
-
-        return config;
     }
 
     @TaskAction
