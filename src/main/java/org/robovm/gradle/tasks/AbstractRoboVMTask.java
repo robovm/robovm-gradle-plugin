@@ -75,10 +75,6 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     }
 
     public AppCompiler build(OS os, Arch arch, TargetType targetType) {
-        return build(os, arch, targetType, true);
-    }
-
-    public AppCompiler build(OS os, Arch arch, TargetType targetType, boolean skipInstall) {
         getLogger().info("Building RoboVM app for: " + os + " (" + arch + ")");
 
         Config.Builder builder;
@@ -87,6 +83,25 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         } catch (IOException e) {
             throw new GradleException(e.getMessage(), e);
         }
+
+        configure(builder).os(os).arch(arch).targetType(targetType);
+
+        // execute the RoboVM build
+        Config config;
+
+        try {
+            getLogger().info("Compiling RoboVM app, this could take a while, especially the first time round");
+            config = builder.build();
+            AppCompiler compiler = new AppCompiler(config);
+            compiler.compile();
+            getLogger().info("Compile RoboVM app completed.");
+            return compiler;
+        } catch (IOException e) {
+            throw new GradleException("Error building RoboVM executable for app", e);
+        }
+    }
+
+    protected Config.Builder configure(Config.Builder builder) {
         builder.logger(getRoboVMLogger());
 
         if (extension.getPropertiesFile() != null) {
@@ -134,7 +149,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         }
 
         File installDirectory = new File(project.getBuildDir(), "robovm");
-        File temporaryDirectory = new File(new File(installDirectory, os.name()), arch.name());
+        File temporaryDirectory = new File(project.getBuildDir(), "robovm.tmp");
         try {
             FileUtils.deleteDirectory(temporaryDirectory);
         } catch (IOException e) {
@@ -144,11 +159,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
         builder.home(new Config.Home(unpack()))
                 .tmpDir(temporaryDirectory)
-                .targetType(targetType)
-                .skipInstall(skipInstall)
-                .installDir(installDirectory)
-                .os(os)
-                .arch(arch);
+                .skipInstall(true)
+                .installDir(installDirectory);
 
         if (project.hasProperty("mainClassName")) {
             builder.mainClass((String) project.property("mainClassName"));
@@ -196,20 +208,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
             builder.addClasspathEntry(classpathEntry);
         }
-
-        // execute the RoboVM build
-        Config config;
-
-        try {
-            getLogger().info("Compiling RoboVM app, this could take a while, especially the first time round");
-            config = builder.build();
-            AppCompiler compiler = new AppCompiler(config);
-            compiler.compile();
-            getLogger().info("Compile RoboVM app completed.");
-            return compiler;
-        } catch (IOException e) {
-            throw new GradleException("Error building RoboVM executable for app", e);
-        }
+        
+        return builder;
     }
 
     @TaskAction

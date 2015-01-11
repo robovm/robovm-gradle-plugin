@@ -16,12 +16,15 @@
 package org.robovm.gradle.tasks;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gradle.api.GradleException;
+import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
-import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
  *
@@ -32,9 +35,23 @@ public class CreateIPATask extends AbstractRoboVMTask {
     @Override
     public void invoke() {
         try {
-            Config config = build(OS.ios, Arch.thumbv7, TargetType.ios, false).getConfig();
-            IOSTarget target = (IOSTarget) config.getTarget();
-            target.createIpa();
+            Config.Builder builder = configure(new Config.Builder())
+                    .skipInstall(false)
+                    .os(OS.ios)
+                    .targetType(TargetType.ios);
+
+            List<Arch> archs = new ArrayList<>();
+            String ipaArchs = extension.getIpaArchs();
+            if (ipaArchs == null || ipaArchs.trim().isEmpty()) {
+                archs.add(Arch.thumbv7);
+            } else {
+                for (String s : ipaArchs.trim().split(":")) {
+                    archs.add(Arch.valueOf(s));
+                }
+            }
+            
+            AppCompiler compiler = new AppCompiler(builder.build());
+            compiler.createIpa(archs);
         } catch (IOException e) {
             throw new GradleException("Failed to create IPA", e);
         }

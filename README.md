@@ -79,3 +79,9 @@ To launch on device in 64-bit mode:
 ```
 gradle -Probovm.arch=arm64 launchIOSDevice
 ```
+
+The `createIPA` task will by default just include a 32-bit verison of the app in the IPA. Use the `robovm.ipaArchs` property to specify the archs to include in the IPA:
+
+```
+gradle -Probovm.ipaArchs=thumbv7:arm64 createIPA
+```
