@@ -16,7 +16,6 @@
 package org.robovm.gradle.tasks;
 
 import java.io.File;
-import java.util.List;
 
 import org.gradle.api.GradleException;
 import org.robovm.compiler.AppCompiler;
@@ -26,7 +25,6 @@ import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
-import org.robovm.compiler.target.ios.SDK;
 
 /**
  *
@@ -36,12 +34,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
 
     protected void launch(DeviceType type) {
         try {
-            Arch arch = Arch.x86;
-            if (extension.getArch() != null && extension.getArch().equals(Arch.x86_64.toString())) {
-                arch = Arch.x86_64;
-            }
-
-            AppCompiler compiler = build(OS.ios, arch, TargetType.ios);
+            AppCompiler compiler = build(OS.ios, getArch(), TargetType.ios);
             Config config = compiler.getConfig();
 
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
@@ -89,85 +82,17 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
         }
     }
 
+    protected Arch getArch() {
+        Arch arch = Arch.x86;
+        if (extension.getArch() != null && extension.getArch().equals(Arch.x86_64.toString())) {
+            arch = Arch.x86_64;
+        }
+        return arch;
+    }
+
     protected DeviceType getDeviceType(Config.Home home, DeviceType.DeviceFamily family) {
-        DeviceType deviceType;
-
-        if (project.hasProperty("robovm.device.name") || project.hasProperty("robovm.sdk.version")) {
-            String deviceName = getDeviceName(home, family);
-            String sdkVersion = getSDKVersion();
-            String deviceTypeId = deviceName + ", " + sdkVersion;
-
-            deviceType = DeviceType.getDeviceType(home, deviceTypeId);
-
-            if (deviceType == null) {
-                throw new GradleException("Specified robovm.device.name and robovm.sdk.version are invalid: " + deviceTypeId);
-            }
-        } else {
-            deviceType = DeviceType.getBestDeviceType(home, family);
-        }
-
-        return deviceType;
-    }
-
-    private String getDeviceName(Config.Home home, DeviceType.DeviceFamily family) {
-        String deviceName = null;
-        List<DeviceType> deviceTypes = DeviceType.listDeviceTypes(home);
-
-        if (deviceTypes.size() > 0) {
-            if (project.hasProperty("robovm.device.name")) {
-                String name = (String) project.getProperties().get("robovm.device.name");
-
-                for (DeviceType deviceType : deviceTypes) {
-                    if (deviceType.getSimpleDeviceName().equals(name) && deviceType.getFamily().equals(family)) {
-                        deviceName = deviceType.getSimpleDeviceName();
-                        break;
-                    }
-                }
-
-                if (deviceName == null) {
-                    throw new GradleException("Specified robovm.device.name is invalid: " + name);
-                }
-            } else {
-                deviceName = deviceTypes.get(0).getSimpleDeviceName();
-            }
-        }
-
-        return deviceName;
-    }
-
-    private String getSDKVersion() {
-        String sdkVersion = null;
-        List<SDK> sdks = SDK.listSimulatorSDKs();
-
-        if (sdks.size() > 0) {
-            if (project.hasProperty("robovm.sdk.version")) {
-                String version = (String) project.getProperties().get("robovm.sdk.version");
-
-                for (SDK sdk : sdks) {
-                    if (sdk.getVersion().equals(version)) {
-                        sdkVersion = version;
-                        break;
-                    }
-                }
-
-                if (sdkVersion == null) {
-                    throw new GradleException("Specified robovm.sdk.version is invalid: " + version);
-                }
-            } else {
-                SDK latestSdk = null;
-
-                for (SDK sdk : SDK.listSimulatorSDKs()) {
-                    if (latestSdk == null || ((sdk.getMajor() << 8) | (sdk.getMinor())) > ((latestSdk.getMajor() << 8) | (latestSdk.getMinor()))) {
-                        latestSdk = sdk;
-                    }
-                }
-
-                if (latestSdk != null) {
-                    sdkVersion = latestSdk.getVersion();
-                }
-            }
-        }
-
-        return sdkVersion;
+        String deviceName = (String) project.getProperties().get("robovm.device.name");
+        String sdkVersion = (String) project.getProperties().get("robovm.sdk.version");
+        return DeviceType.getBestDeviceType(home, getArch(), family, deviceName, sdkVersion);
     }
 }
