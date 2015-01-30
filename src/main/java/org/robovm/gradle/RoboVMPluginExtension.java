@@ -64,7 +64,9 @@ public class RoboVMPluginExtension {
     }
 
     public String getIosSignIdentity() {
-        return iosSignIdentity;
+        return project.hasProperty("robovm.iosSignIdentity") 
+                ? project.getProperties().get("robovm.iosSignIdentity").toString() 
+                : iosSignIdentity;
     }
 
     public void setIosSignIdentity(String iosSignIdentity) {
@@ -72,7 +74,9 @@ public class RoboVMPluginExtension {
     }
 
     public String getIosProvisioningProfile() {
-        return iosProvisioningProfile;
+        return project.hasProperty("robovm.iosProvisioningProfile") 
+                ? project.getProperties().get("robovm.iosProvisioningProfile").toString() 
+                : iosProvisioningProfile;
     }
 
     public void setIosProvisioningProfile(String iosProvisioningProfile) {
@@ -80,7 +84,9 @@ public class RoboVMPluginExtension {
     }
 
     public String getIosSimulatorSdk() {
-        return iosSimulatorSdk;
+        return project.hasProperty("robovm.iosSimulatorSdk") 
+                ? project.getProperties().get("robovm.iosSimulatorSdk").toString() 
+                : iosSimulatorSdk;
     }
 
     public void setIosSimulatorSdk(String iosSimulatorSdk) {
@@ -104,7 +110,9 @@ public class RoboVMPluginExtension {
     }
 
     public boolean isIosSkipSigning() {
-        return iosSkipSigning;
+        return project.hasProperty("robovm.iosSkipSigning") 
+                ? Boolean.parseBoolean(project.getProperties().get("robovm.iosSkipSigning").toString())
+                : iosSkipSigning;
     }
 
     public void setIosSkipSigning(boolean iosSkipSigning) {
