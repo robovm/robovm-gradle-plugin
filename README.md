@@ -85,3 +85,13 @@ The `createIPA` task will by default just include a 32-bit verison of the app in
 ```
 gradle -Probovm.ipaArchs=thumbv7:arm64 createIPA
 ```
+
+## Plugin Development
+To debug the plugin, build and install it to your local repository. Next, set `GRADLE_OPTS` as follows:
+
+```bash
+export GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5006"
+```
+You can now fire up a Gradle build for some test project. Gradle will wait for a JDWP debugger to attach. You can do so in Eclipse or Intellij IDEA.
+
+Note: if your test project uses the Gradle daemon, you have to disable it. Also, if you have a gradle.properties file specifying JVM arguments, Gradle will spawn a new JVM. You can remove/rename the gradle.properties file while debugging.
