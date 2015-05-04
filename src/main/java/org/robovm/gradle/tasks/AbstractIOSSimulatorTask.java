@@ -90,9 +90,9 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
         return arch;
     }
 
-    protected DeviceType getDeviceType(Config.Home home, DeviceType.DeviceFamily family) {
+    protected DeviceType getDeviceType(DeviceType.DeviceFamily family) {
         String deviceName = (String) project.getProperties().get("robovm.device.name");
         String sdkVersion = (String) project.getProperties().get("robovm.sdk.version");
-        return DeviceType.getBestDeviceType(home, getArch(), family, deviceName, sdkVersion);
+        return DeviceType.getBestDeviceType(getArch(), family, deviceName, sdkVersion);
     }
 }
