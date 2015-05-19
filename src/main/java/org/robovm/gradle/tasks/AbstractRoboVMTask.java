@@ -17,13 +17,23 @@ package org.robovm.gradle.tasks;
 
 import org.robovm.gradle.RoboVMPlugin;
 import org.robovm.gradle.RoboVMPluginExtension;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
+
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
@@ -111,7 +121,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 throw new GradleException("Invalid 'propertiesFile' specified for RoboVM compile: " + propertiesFile);
             }
             try {
-                getLogger().debug("Including properties file in RoboVM compiler config: " + propertiesFile.getAbsolutePath());
+                getLogger().debug(
+                        "Including properties file in RoboVM compiler config: " + propertiesFile.getAbsolutePath());
                 builder.addProperties(propertiesFile);
             } catch (IOException e) {
                 throw new GradleException("Failed to add properties file to RoboVM config: " + propertiesFile);
@@ -121,7 +132,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 builder.readProjectProperties(project.getProjectDir(), false);
             } catch (IOException e) {
                 throw new GradleException(
-                        "Failed to read RoboVM project properties file(s) in " 
+                        "Failed to read RoboVM project properties file(s) in "
                                 + project.getProjectDir().getAbsolutePath(), e);
             }
         }
@@ -143,7 +154,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 builder.readProjectConfig(project.getProjectDir(), false);
             } catch (Exception e) {
                 throw new GradleException(
-                        "Failed to read project RoboVM config file in " 
+                        "Failed to read project RoboVM config file in "
                                 + project.getProjectDir().getAbsolutePath(), e);
             }
         }
@@ -172,7 +183,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 builder.addPluginArgument("debug:jdwpport=" + extension.getDebugPort());
             }
         }
-        
+
         if (extension.isIosSkipSigning()) {
             builder.iosSkipSigning(true);
         } else {
@@ -187,7 +198,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 String iosProvisioningProfile = extension.getIosProvisioningProfile();
 
                 getLogger().debug("Using explicit iOS provisioning profile: " + iosProvisioningProfile);
-                builder.iosProvisioningProfile(ProvisioningProfile.find(ProvisioningProfile.list(), iosProvisioningProfile));
+                builder.iosProvisioningProfile(ProvisioningProfile.find(ProvisioningProfile.list(),
+                        iosProvisioningProfile));
             }
         }
 
@@ -208,7 +220,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
 
             builder.addClasspathEntry(classpathEntry);
         }
-        
+
         return builder;
     }
 
@@ -216,7 +228,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     abstract public void invoke();
 
     protected File unpack() throws GradleException {
-        final Artifact artifact = resolveArtifact("org.robovm:robovm-dist:tar.gz:nocompiler:" + RoboVMPlugin.getRoboVMVersion());
+        final Artifact artifact = resolveArtifact("org.robovm:robovm-dist:tar.gz:nocompiler:"
+                + RoboVMPlugin.getRoboVMVersion());
         final File distTarFile = artifact.getFile();
         final File unpackedDirectory = new File(distTarFile.getParent(), "unpacked");
         final File unpackedDistDirectory = new File(unpackedDirectory, "robovm-" + RoboVMPlugin.getRoboVMVersion());
@@ -238,13 +251,11 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 throw new GradleException("Unable to create base directory to unpack into: " + unpackedDirectory);
             }
 
-            getAnt().invokeMethod("untar", new HashMap<String, Object>() {
-                {
-                    put("src", distTarFile.getAbsolutePath());
-                    put("dest", unpackedDirectory.getAbsolutePath());
-                    put("compression", "gzip");
-                }
-            });
+            try {
+                extractTarGz(distTarFile, unpackedDirectory);
+            } catch (IOException e) {
+                throw new GradleException("Couldn't extract distribution tar.gz", e);
+            }
 
             if (!unpackedDistDirectory.exists()) {
                 throw new GradleException("Unable to unpack archive");
@@ -280,7 +291,9 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
             throw new GradleException(e.getMessage(), e);
         }
 
-        getLogger().debug("Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from " + result.getRepository());
+        getLogger().debug(
+                "Resolved artifact " + artifact + " to " + result.getArtifact().getFile() + " from "
+                        + result.getRepository());
 
         return result.getArtifact();
     }
@@ -332,9 +345,42 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
     private List<RemoteRepository> createRemoteRepositories() {
         List<RemoteRepository> repositories = new ArrayList<>();
         repositories.add(new RemoteRepository("maven-central", "default", "http://repo1.maven.org/maven2/"));
-        repositories.add(new RemoteRepository("oss.sonatype.org-snapshots", "default", "https://oss.sonatype.org/content/repositories/snapshots/"));
+        repositories.add(new RemoteRepository("oss.sonatype.org-snapshots", "default",
+                "https://oss.sonatype.org/content/repositories/snapshots/"));
 
         return repositories;
+    }
+
+    private static void extractTarGz(File archive, File destDir) throws IOException {
+        TarArchiveInputStream in = null;
+        try {
+            in = new TarArchiveInputStream(new GZIPInputStream(new FileInputStream(archive)));
+            ArchiveEntry entry = null;
+            while ((entry = in.getNextEntry()) != null) {
+                File f = new File(destDir, entry.getName());
+                if (entry.isDirectory()) {
+                    f.mkdirs();
+                } else {
+                    f.getParentFile().mkdirs();
+                    OutputStream out = null;
+                    try {
+                        out = new FileOutputStream(f);
+                        IOUtils.copy(in, out);
+                    } finally {
+                        IOUtils.closeQuietly(out);
+                    }
+                }
+                if (entry instanceof TarArchiveEntry) {
+                    int mode = ((TarArchiveEntry) entry).getMode();
+                    if ((mode & 00100) > 0) {
+                        // Preserve execute permissions
+                        f.setExecutable(true, (mode & 00001) == 0);
+                    }
+                }
+            }
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
     }
 
     public static class ManualWagonProvider implements WagonProvider {

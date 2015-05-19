@@ -33,7 +33,8 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
+    compile localGroovy()    
+    compile "org.apache.commons:commons-compress:1.5"
     compile "org.robovm:robovm-dist-compiler:${roboVMVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
@@ -74,7 +75,7 @@ modifyPom {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.4'
 }
 
 // apply from: 'local.gradle'

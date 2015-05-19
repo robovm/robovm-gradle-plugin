@@ -167,4 +167,10 @@ class RoboVMPluginTest {
     public void testGetTaskByNameCreateIPA() {
         assertTrue(project.tasks.createIPA instanceof CreateIPATask);
     }
+    
+    @Test
+    public void testUnpackDistribution() {
+        CreateIPATask task = project.tasks.createIPA;
+        task.unpack();
+    }
 }
