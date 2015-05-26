@@ -83,8 +83,8 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
     }
 
     protected Arch getArch() {
-        Arch arch = Arch.x86;
-        if (extension.getArch() != null && extension.getArch().equals(Arch.x86_64.toString())) {
+        Arch arch = Arch.x86_64;
+        if (extension.getArch() != null && extension.getArch().equals(Arch.x86.toString())) {
             arch = Arch.x86_64;
         }
         return arch;
