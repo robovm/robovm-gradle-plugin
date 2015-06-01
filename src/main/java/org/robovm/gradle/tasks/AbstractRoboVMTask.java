@@ -370,6 +370,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                         IOUtils.closeQuietly(out);
                     }
                 }
+                f.setLastModified(entry.getLastModifiedDate().getTime());
                 if (entry instanceof TarArchiveEntry) {
                     int mode = ((TarArchiveEntry) entry).getMode();
                     if ((mode & 00100) > 0) {
