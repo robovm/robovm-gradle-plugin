@@ -23,8 +23,8 @@ import org.gradle.api.GradleException;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
+import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
  *
@@ -38,7 +38,7 @@ public class CreateIPATask extends AbstractRoboVMTask {
             Config.Builder builder = configure(new Config.Builder())
                     .skipInstall(false)
                     .os(OS.ios)
-                    .targetType(TargetType.ios);
+                    .targetType(IOSTarget.TYPE);
 
             List<Arch> archs = new ArrayList<>();
             String ipaArchs = extension.getIpaArchs();

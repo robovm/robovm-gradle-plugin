@@ -19,9 +19,9 @@ import org.gradle.api.GradleException;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.target.LaunchParameters;
+import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
  *
@@ -37,7 +37,7 @@ public class IOSDeviceTask extends AbstractRoboVMTask {
                 arch = Arch.arm64;
             }
 
-            AppCompiler compiler = build(OS.ios, arch, TargetType.ios);
+            AppCompiler compiler = build(OS.ios, arch, IOSTarget.TYPE);
             Config config = compiler.getConfig();
             LaunchParameters launchParameters = config.getTarget().createLaunchParameters();
             compiler.launch(launchParameters);

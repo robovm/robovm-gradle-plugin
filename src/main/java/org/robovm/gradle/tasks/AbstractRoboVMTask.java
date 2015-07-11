@@ -15,9 +15,6 @@
  */
 package org.robovm.gradle.tasks;
 
-import org.robovm.gradle.RoboVMPlugin;
-import org.robovm.gradle.RoboVMPluginExtension;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -57,11 +54,12 @@ import org.gradle.mvn3.org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.Config.TargetType;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.log.Logger;
 import org.robovm.compiler.target.ios.ProvisioningProfile;
 import org.robovm.compiler.target.ios.SigningIdentity;
+import org.robovm.gradle.RoboVMPlugin;
+import org.robovm.gradle.RoboVMPluginExtension;
 
 /**
  *
@@ -84,7 +82,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         remoteRepositories = createRemoteRepositories();
     }
 
-    public AppCompiler build(OS os, Arch arch, TargetType targetType) {
+    public AppCompiler build(OS os, Arch arch, String targetType) {
         getLogger().info("Building RoboVM app for: " + os + " (" + arch + ")");
 
         Config.Builder builder;
