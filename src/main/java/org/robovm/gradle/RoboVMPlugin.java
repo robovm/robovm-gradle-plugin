@@ -15,11 +15,14 @@
  */
 package org.robovm.gradle;
 
+import org.robovm.gradle.tasks.ConsoleTask;
 import org.robovm.gradle.tasks.CreateIPATask;
 import org.robovm.gradle.tasks.IOSDeviceTask;
 import org.robovm.gradle.tasks.IPadSimulatorTask;
 import org.robovm.gradle.tasks.IPhoneSimulatorTask;
+
 import java.util.HashMap;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.robovm.compiler.Version;
@@ -53,6 +56,11 @@ public class RoboVMPlugin implements Plugin<Project> {
                 put("type", IOSDeviceTask.class);
             }
         }, "launchIOSDevice");
+        project.task(new HashMap<String, Object>() {
+            {
+                put("type", ConsoleTask.class);
+            }
+        }, "launchConsole");
         project.task(new HashMap<String, Object>() {
             {
                 put("type", CreateIPATask.class);
