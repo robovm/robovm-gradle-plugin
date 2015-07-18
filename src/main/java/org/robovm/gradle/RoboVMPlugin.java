@@ -15,6 +15,7 @@
  */
 package org.robovm.gradle;
 
+import org.robovm.gradle.tasks.BuildTask;
 import org.robovm.gradle.tasks.ConsoleTask;
 import org.robovm.gradle.tasks.CreateIPATask;
 import org.robovm.gradle.tasks.IOSDeviceTask;
@@ -66,5 +67,10 @@ public class RoboVMPlugin implements Plugin<Project> {
                 put("type", CreateIPATask.class);
             }
         }, "createIPA");
+        project.task(new HashMap<String, Object>() {
+            {
+                put("type", BuildTask.class);
+            }
+        }, "buildBinary");
     }
 }
