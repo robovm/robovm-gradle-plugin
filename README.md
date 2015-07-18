@@ -47,6 +47,7 @@ The RoboVM plugin defines the following tasks:
 * `launchIPhoneSimulator`: Runs Your iOS App in the iPhone Simulator.
 * `launchIPadSimulator`: Runs Your iOS App in the iPad Simulator.
 * `launchIOSDevice`: Runs Your iOS App in the iOS Device.
+* `launchConsole`: Runs a Console App.
 * `createIPA`: Creates .ipa file.
 
 ## Project properties
