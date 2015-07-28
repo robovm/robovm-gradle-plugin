@@ -36,6 +36,11 @@ dependencies {
     compile localGroovy()    
     compile "org.apache.commons:commons-compress:1.5"
     compile "org.robovm:robovm-dist-compiler:${roboVMVersion}"
+    compile 'org.sonatype.aether:aether:1.13.1'
+    compile 'org.sonatype.aether:aether-connector-wagon:1.13.1'
+    compile 'org.apache.maven:maven-aether-provider:3.0.4'    
+    compile 'org.apache.maven.wagon:wagon-provider-api:2.4'
+    compile 'org.apache.maven.wagon:wagon-http:2.4'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
@@ -75,7 +80,7 @@ modifyPom {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = '2.5'
 }
 
 // apply from: 'local.gradle'
