@@ -101,7 +101,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
             getLogger().info("Compiling RoboVM app, this could take a while, especially the first time round");
             config = builder.build();
             AppCompiler compiler = new AppCompiler(config);
-            compiler.compile();
+            compiler.build();
             getLogger().info("Compile RoboVM app completed.");
             return compiler;
         } catch (IOException e) {

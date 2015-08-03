@@ -48,8 +48,9 @@ The RoboVM plugin defines the following tasks:
 * `launchIPadSimulator`: Runs Your iOS App in the iPad Simulator.
 * `launchIOSDevice`: Runs Your iOS App in the iOS Device.
 * `launchConsole`: Runs a Console App.
-* `createIPA`: Creates .ipa file.
-* `buildBinary`: Compiles a binary and installs it to `build/robovm/`.
+* `createIPA`: Creates .ipa file. This is an alias for the `robovmArchive` task.
+* `robovmArchive`: Compiles a binary,a rchives it in a format suitable for distribution and saves it to `build/robovm/`.
+* `robovmInstall`: Compiles a binary and installs it to `build/robovm/`.
 
 ## Project properties
 
@@ -82,11 +83,20 @@ To launch on device in 64-bit mode:
 gradle -Probovm.arch=arm64 launchIOSDevice
 ```
 
-The `createIPA` task will by default just include a 32-bit verison of the app in the IPA. Use the `robovm.ipaArchs` property to specify the archs to include in the IPA:
+The `robovmArchive` task will by default include the archs listed in the `robovm.xml` file in the archive. Use the `robovm.archs` property to specify the archs to include in the archive:
 
 ```
-gradle -Probovm.ipaArchs=thumbv7:arm64 createIPA
+gradle -Probovm.archs=thumbv7:arm64 robovmArchive
 ```
+
+The `createIPA` task is an alias for the `robovmArchive` task.
+
+The `robovmInstall` task is very similar to the `robovmArchive` task but doesn't archive the folder structure it creates. It also supports the `robovm.archs` property:
+
+```
+gradle -Probovm.archs=x86:x86_64 robovmInstall
+```
+
 ## Debugging
 You can instruct the RoboVM Gradle plugin to compile and run your app in debug mode:
 

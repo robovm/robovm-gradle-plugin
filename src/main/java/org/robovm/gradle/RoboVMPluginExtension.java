@@ -37,7 +37,7 @@ public class RoboVMPluginExtension {
     private boolean iosSkipSigning = false;
     private boolean debug = false;
     private int debugPort = -1;
-    private String ipaArchs;
+    private String archs;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -155,11 +155,18 @@ public class RoboVMPluginExtension {
         this.debugPort = debugPort;
     }
     
-    public String getIpaArchs() {
-        return project.hasProperty("robovm.ipaArchs") ? project.getProperties().get("robovm.ipaArchs").toString() : ipaArchs;
+    public String getArchs() {
+        if (project.hasProperty("robovm.ipaArchs")) {
+            // Kept for backwards compatibility
+            return project.getProperties().get("robovm.ipaArchs").toString();
+        }
+        if (project.hasProperty("robovm.archs")) {
+            return project.getProperties().get("robovm.archs").toString();
+        }
+        return archs;
     }
     
-    public void setIpaArchs(String ipaArchs) {
-        this.ipaArchs = ipaArchs;
+    public void setArchs(String ipaArchs) {
+        this.archs = ipaArchs;
     }
 }

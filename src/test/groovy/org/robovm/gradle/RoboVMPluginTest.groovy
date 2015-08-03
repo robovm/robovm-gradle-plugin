@@ -23,7 +23,7 @@ import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.robovm.gradle.tasks.CreateIPATask
+import org.robovm.gradle.tasks.ArchiveTask
 import org.robovm.gradle.tasks.IOSDeviceTask
 import org.robovm.gradle.tasks.IPadSimulatorTask
 import org.robovm.gradle.tasks.IPhoneSimulatorTask
@@ -165,12 +165,12 @@ class RoboVMPluginTest {
 
     @Test
     public void testGetTaskByNameCreateIPA() {
-        assertTrue(project.tasks.createIPA instanceof CreateIPATask);
+        assertTrue(project.tasks.createIPA instanceof ArchiveTask);
     }
     
     @Test
     public void testUnpackDistribution() {
-        CreateIPATask task = project.tasks.createIPA;
+        ArchiveTask task = project.tasks.createIPA;
         task.unpack();
     }
 }

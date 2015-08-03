@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 RoboVM AB.
+ * Copyright (C) 2015 RoboVM AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,37 +23,41 @@ import org.gradle.api.GradleException;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.OS;
-import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
- *
- * @author Junji Takakura
+ * 
  */
-public class CreateIPATask extends AbstractRoboVMTask {
+public abstract class AbstractRoboVMBuildTask extends AbstractRoboVMTask {
 
+    protected abstract boolean shouldArchive();
+    
     @Override
     public void invoke() {
         try {
             Config.Builder builder = configure(new Config.Builder())
-                    .skipInstall(false)
-                    .os(OS.ios)
-                    .targetType(IOSTarget.TYPE);
+                    .skipInstall(false);
 
-            List<Arch> archs = new ArrayList<>();
-            String ipaArchs = extension.getIpaArchs();
-            if (ipaArchs == null || ipaArchs.trim().isEmpty()) {
-                archs.add(Arch.thumbv7);
-            } else {
-                for (String s : ipaArchs.trim().split(":")) {
+            if (extension.getArchs() != null) {
+                List<Arch> archs = new ArrayList<>();
+                for (String s : extension.getArchs().trim().split(":")) {
                     archs.add(Arch.valueOf(s));
                 }
+                builder.archs(archs);
             }
-            
+
             AppCompiler compiler = new AppCompiler(builder.build());
-            compiler.createIpa(archs);
+            compiler.build();
+            if (shouldArchive()) {
+                compiler.archive();
+            } else {
+                compiler.install();
+            }
         } catch (IOException e) {
-            throw new GradleException("Failed to create IPA", e);
+            if (shouldArchive()) {
+                throw new GradleException("Failed to create archive", e);
+            } else {
+                throw new GradleException("Failed to install", e);
+            }
         }
     }
 }

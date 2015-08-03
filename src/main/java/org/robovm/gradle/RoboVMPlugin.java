@@ -15,18 +15,17 @@
  */
 package org.robovm.gradle;
 
-import org.robovm.gradle.tasks.BuildTask;
-import org.robovm.gradle.tasks.ConsoleTask;
-import org.robovm.gradle.tasks.CreateIPATask;
-import org.robovm.gradle.tasks.IOSDeviceTask;
-import org.robovm.gradle.tasks.IPadSimulatorTask;
-import org.robovm.gradle.tasks.IPhoneSimulatorTask;
-
-import java.util.HashMap;
+import java.util.Collections;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.robovm.compiler.Version;
+import org.robovm.gradle.tasks.ArchiveTask;
+import org.robovm.gradle.tasks.ConsoleTask;
+import org.robovm.gradle.tasks.IOSDeviceTask;
+import org.robovm.gradle.tasks.IPadSimulatorTask;
+import org.robovm.gradle.tasks.IPhoneSimulatorTask;
+import org.robovm.gradle.tasks.InstallTask;
 
 /**
  * Gradle plugin that extends the Java plugin for RoboVM development.
@@ -42,35 +41,12 @@ public class RoboVMPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         project.getExtensions().create(RoboVMPluginExtension.NAME, RoboVMPluginExtension.class, project);
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", IPhoneSimulatorTask.class);
-            }
-        }, "launchIPhoneSimulator");
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", IPadSimulatorTask.class);
-            }
-        }, "launchIPadSimulator");
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", IOSDeviceTask.class);
-            }
-        }, "launchIOSDevice");
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", ConsoleTask.class);
-            }
-        }, "launchConsole");
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", CreateIPATask.class);
-            }
-        }, "createIPA");
-        project.task(new HashMap<String, Object>() {
-            {
-                put("type", BuildTask.class);
-            }
-        }, "buildBinary");
+        project.task(Collections.singletonMap("type", IPhoneSimulatorTask.class), "launchIPhoneSimulator");
+        project.task(Collections.singletonMap("type", IPadSimulatorTask.class), "launchIPadSimulator");
+        project.task(Collections.singletonMap("type", IOSDeviceTask.class), "launchIOSDevice");
+        project.task(Collections.singletonMap("type", ConsoleTask.class), "launchConsole");
+        project.task(Collections.singletonMap("type", ArchiveTask.class), "createIPA");
+        project.task(Collections.singletonMap("type", ArchiveTask.class), "robovmArchive");
+        project.task(Collections.singletonMap("type", InstallTask.class), "robovmInstall");
     }
 }
