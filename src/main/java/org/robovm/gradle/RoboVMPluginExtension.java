@@ -15,6 +15,8 @@
  */
 package org.robovm.gradle;
 
+import java.io.File;
+
 import org.gradle.api.Project;
 
 /**
@@ -38,6 +40,7 @@ public class RoboVMPluginExtension {
     private boolean debug = false;
     private int debugPort = -1;
     private String archs;
+    private String installDir;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -168,5 +171,13 @@ public class RoboVMPluginExtension {
     
     public void setArchs(String ipaArchs) {
         this.archs = ipaArchs;
+    }
+
+    public String getInstallDir() {
+        return project.hasProperty("robovm.installDir") ? project.getProperties().get("robovm.installDir").toString() : installDir;
+    }
+
+    public void setInstallDir(String installDir) {
+        this.installDir = installDir;
     }
 }
