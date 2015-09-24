@@ -38,6 +38,9 @@ public class IOSDeviceTask extends AbstractRoboVMTask {
             }
 
             AppCompiler compiler = build(OS.ios, arch, IOSTarget.TYPE);
+            if (extension.isSkipLaunch()) {
+                return;
+            }
             Config config = compiler.getConfig();
             LaunchParameters launchParameters = config.getTarget().createLaunchParameters();
             compiler.launch(launchParameters);

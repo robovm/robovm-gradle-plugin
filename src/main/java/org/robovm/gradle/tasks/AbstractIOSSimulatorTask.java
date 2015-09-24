@@ -35,8 +35,12 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
     protected void launch(DeviceType type) {
         try {
             AppCompiler compiler = build(OS.ios, getArch(), IOSTarget.TYPE);
-            Config config = compiler.getConfig();
 
+            if (extension.isSkipLaunch()) {
+                return;
+            }
+
+            Config config = compiler.getConfig();
             IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
             launchParameters.setDeviceType(type);
 
