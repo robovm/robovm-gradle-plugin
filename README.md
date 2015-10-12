@@ -97,6 +97,19 @@ The `robovmInstall` task is very similar to the `robovmArchive` task but doesn't
 gradle -Probovm.archs=x86:x86_64 robovmInstall
 ```
 
+## License Management
+To activate your license use the `activateLicense` task:
+
+```
+gradle :activateLicense -Probovm.licenseKey=<your-key>
+```
+
+To deactivate your license use the `deactivateLicense` task:
+
+```
+gradle :deactivateLicense
+```
+
 ## Debugging
 You can instruct the RoboVM Gradle plugin to compile and run your app in debug mode:
 
@@ -105,6 +118,7 @@ gradle -Probovm.debug=true -Probovm.debugPort=7777 launchIPhoneSimulator
 ```
 
 You can then attach a debugger, e.g. the Eclipse or IntelliJ IDEA debugger via a remote run configuration. Simply set the host to `localhost` and the port to what you specified via `-Probovm.debugPort` (7777 in the case above).
+
 
 ## Plugin Development
 To debug the plugin, build and install it to your local repository. Next, set `GRADLE_OPTS` as follows:
