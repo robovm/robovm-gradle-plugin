@@ -41,7 +41,7 @@ public class RoboVMPluginExtension {
     private int debugPort = -1;
     private boolean skipLaunch = false;
     private String archs;
-    private String installDir;
+    private String installDir;    
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -190,5 +190,9 @@ public class RoboVMPluginExtension {
 
     public void setInstallDir(String installDir) {
         this.installDir = installDir;
+    }
+    
+    public String getLicenseKey() {
+        return project.hasProperty("robovm.licenseKey") ? project.getProperties().get("robovm.licenseKey").toString() : null;
     }
 }
