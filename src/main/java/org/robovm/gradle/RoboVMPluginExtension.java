@@ -15,8 +15,6 @@
  */
 package org.robovm.gradle;
 
-import java.io.File;
-
 import org.gradle.api.Project;
 
 /**
@@ -42,6 +40,7 @@ public class RoboVMPluginExtension {
     private boolean skipLaunch = false;
     private String archs;
     private String installDir;    
+    private String cacheDir;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -194,5 +193,13 @@ public class RoboVMPluginExtension {
     
     public String getLicenseKey() {
         return project.hasProperty("robovm.licenseKey") ? project.getProperties().get("robovm.licenseKey").toString() : null;
+    }
+    
+    public void setCachedir(String cacheDir) {
+        this.cacheDir = cacheDir;
+    }
+    
+    public String getCacheDir() {
+        return project.hasProperty("robovm.cacheDir") ? project.getProperties().get("robovm.cacheDir").toString() : null;
     }
 }

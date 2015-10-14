@@ -163,6 +163,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         } else {
             installDir = new File(project.getBuildDir(), "robovm");
         }
+        File cacheDir = null;
+        if(extension.getCacheDir() != null) {
+            cacheDir = new File(extension.getCacheDir());
+        } else {
+            cacheDir = Config.getDefaultCacheDir();
+        }
         File temporaryDirectory = new File(project.getBuildDir(), "robovm.tmp");
         try {
             FileUtils.deleteDirectory(temporaryDirectory);
@@ -174,7 +180,8 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         builder.home(new Config.Home(unpack()))
                 .tmpDir(temporaryDirectory)
                 .skipInstall(true)
-                .installDir(installDir);
+                .installDir(installDir)
+                .cacheDir(cacheDir);
 
         if (project.hasProperty("mainClassName")) {
             builder.mainClass((String) project.property("mainClassName"));
