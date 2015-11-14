@@ -194,6 +194,10 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
             }
         }
 
+        if (extension.isSkipLinking()) {
+            builder.skipLinking(true);
+        }
+
         if (extension.isIosSkipSigning()) {
             builder.iosSkipSigning(true);
         } else {
