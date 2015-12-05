@@ -18,11 +18,11 @@ package org.robovm.gradle.tasks;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.gradle.api.GradleException;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.Config.Builder;
 
 /**
  * 
@@ -30,15 +30,6 @@ import org.robovm.compiler.config.Config.Builder;
 public abstract class AbstractRoboVMBuildTask extends AbstractRoboVMTask {
 
     protected abstract boolean shouldArchive();
-    
-    @Override
-    protected Builder configure(Builder builder) {
-        super.configure(builder);
-        if (shouldArchive()) {
-            builder.enableBitcode(extension.isEnableBitcode());
-        }
-        return builder;
-    }
     
     @Override
     public void invoke() {
@@ -53,6 +44,7 @@ public abstract class AbstractRoboVMBuildTask extends AbstractRoboVMTask {
                 }
                 builder.archs(archs);
             }
+            builder.enableBitcode(extension.isEnableBitcode());
 
             AppCompiler compiler = new AppCompiler(builder.build());
             compiler.build();
