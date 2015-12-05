@@ -23,7 +23,7 @@ import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.target.ios.DeviceType;
-import org.robovm.compiler.target.ios.IOSSimulatorLaunchParameters;
+import org.robovm.compiler.target.ios.SimulatorLaunchParameters;
 import org.robovm.compiler.target.ios.IOSTarget;
 
 /**
@@ -41,7 +41,7 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
             }
 
             Config config = compiler.getConfig();
-            IOSSimulatorLaunchParameters launchParameters = (IOSSimulatorLaunchParameters) config.getTarget().createLaunchParameters();
+            SimulatorLaunchParameters launchParameters = (SimulatorLaunchParameters) config.getTarget().createLaunchParameters();
             launchParameters.setDeviceType(type);
 
             if (extension.getStdoutFifo() != null) {
@@ -97,6 +97,6 @@ abstract public class AbstractIOSSimulatorTask extends AbstractRoboVMTask {
     protected DeviceType getDeviceType(DeviceType.DeviceFamily family) {
         String deviceName = (String) project.getProperties().get("robovm.device.name");
         String sdkVersion = (String) project.getProperties().get("robovm.sdk.version");
-        return DeviceType.getBestDeviceType(getArch(), family, deviceName, sdkVersion);
+        return DeviceType.getBestDeviceType(getArch(), OS.ios, family, deviceName, sdkVersion);
     }
 }
