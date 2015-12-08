@@ -28,6 +28,8 @@ import org.robovm.gradle.tasks.IOSDeviceTask;
 import org.robovm.gradle.tasks.IPadSimulatorTask;
 import org.robovm.gradle.tasks.IPhoneSimulatorTask;
 import org.robovm.gradle.tasks.InstallTask;
+import org.robovm.gradle.tasks.TVOSDeviceTask;
+import org.robovm.gradle.tasks.TVOSSimulatorTask;
 
 /**
  * Gradle plugin that extends the Java plugin for RoboVM development.
@@ -46,6 +48,8 @@ public class RoboVMPlugin implements Plugin<Project> {
         project.task(Collections.singletonMap("type", IPhoneSimulatorTask.class), "launchIPhoneSimulator");
         project.task(Collections.singletonMap("type", IPadSimulatorTask.class), "launchIPadSimulator");
         project.task(Collections.singletonMap("type", IOSDeviceTask.class), "launchIOSDevice");
+        project.task(Collections.singletonMap("type", TVOSSimulatorTask.class), "launchTVOSSimulator");
+        project.task(Collections.singletonMap("type", TVOSDeviceTask.class), "launchTVOSDevice");
         project.task(Collections.singletonMap("type", ConsoleTask.class), "launchConsole");
         project.task(Collections.singletonMap("type", ArchiveTask.class), "createIPA");
         project.task(Collections.singletonMap("type", ArchiveTask.class), "robovmArchive");

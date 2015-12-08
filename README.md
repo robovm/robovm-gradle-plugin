@@ -46,10 +46,12 @@ The RoboVM plugin defines the following tasks:
 
 * `launchIPhoneSimulator`: Runs Your iOS App in the iPhone Simulator.
 * `launchIPadSimulator`: Runs Your iOS App in the iPad Simulator.
-* `launchIOSDevice`: Runs Your iOS App in the iOS Device.
+* `launchIOSDevice`: Runs Your iOS App on a connected iOS Device.
+* `launchTVOSSimulator`: Runs Your tvOS App in the AppleTV Simulator.
+* `launchTVOSDevice`: Runs Your tvOS App on a connected AppleTV Device.
 * `launchConsole`: Runs a Console App.
 * `createIPA`: Creates .ipa file. This is an alias for the `robovmArchive` task.
-* `robovmArchive`: Compiles a binary,a rchives it in a format suitable for distribution and saves it to `build/robovm/`.
+* `robovmArchive`: Compiles a binary, archives it in a format suitable for distribution and saves it to `build/robovm/`.
 * `robovmInstall`: Compiles a binary and installs it to `build/robovm/`.
 
 ## Project properties
@@ -57,16 +59,19 @@ The RoboVM plugin defines the following tasks:
 The iOS Simulator launcher properties can be set by project properties via `gradle.properties` or `-P` command line parameter:
 
 * `robovm.device.name`: Set the device name property.
- * iPhone-4s: iPhone 4S
- * iPhone-5: iPhone 5
- * iPhone-5s: iPhone 5S
- * iPhone-6: iPhone 6
- * iPhone-6-Plus: iPhone 6 Plus
- * iPad-2: iPad 2
- * iPad-Retina: iPad Retina
- * iPad-Air: iPad Air
- * Resizable-iPhone: Resizable iPhone
- * Resizable-iPad: Resizable iPad
+ * iPhone-4s
+ * iPhone-5
+ * iPhone-5s
+ * iPhone-6
+ * iPhone-6-Plus
+ * iPhone-6s
+ * iPhone-6s-Plus
+ * iPad-2
+ * iPad-Air
+ * iPad-Air-2
+ * iPad-Pro
+ * iPad-Retina
+ * Apple-TV-1080p
 * `robovm.sdk.version`: Set the sdk version property.
 
 The arch can be specified using the `gradle.properties` or `-P` command line parameter. To launch on the simulator in 64-bit mode use:
@@ -95,6 +100,12 @@ The `robovmInstall` task is very similar to the `robovmArchive` task but doesn't
 
 ```
 gradle -Probovm.archs=x86:x86_64 robovmInstall
+```
+
+To enable bitcode when running `createIPA`, `robovmArchive` or `robovmInstall` add `-Probovm.enableBitcode=true`:
+
+```
+gradle -Probovm.enableBitcode=true -Probovm.archs=thumbv7:arm64 robovmArchive
 ```
 
 ## License Management

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 RoboVM AB.
+ * Copyright (C) 2015 RoboVM AB.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,34 @@ package org.robovm.gradle.tasks;
 
 import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.OS;
-import org.robovm.compiler.target.ios.IOSTarget;
+import org.robovm.compiler.target.ios.DeviceType.DeviceFamily;
+import org.robovm.compiler.target.ios.TVOSTarget;
 
 /**
  *
  */
-public abstract class AbstractIOSSimulatorTask extends AbstractSimulatorTask {
+public class TVOSSimulatorTask extends AbstractSimulatorTask {
 
     @Override
     protected String getTargetType() {
-        return IOSTarget.TYPE;
+        return TVOSTarget.TYPE;
     }
-    
+
     @Override
     protected OS getOs() {
-        return OS.ios;
+        return OS.tvos;
     }
-    
+
     @Override
     protected Arch getArch() {
-        Arch arch = Arch.x86_64;
-        if (extension.getArch() != null && extension.getArch().equals(Arch.x86.toString())) {
-            arch = Arch.x86;
-        }
-        return arch;
+        return Arch.x86_64;
     }
+
+    @Override
+    public void invoke() {
+        launch(getDeviceType(DeviceFamily.AppleTV));
+    }
+
+    
+
 }
