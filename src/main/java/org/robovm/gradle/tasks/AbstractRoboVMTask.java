@@ -31,14 +31,23 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.GradleException;
-import org.gradle.api.Project;
-import org.gradle.api.tasks.TaskAction;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.maven.repository.internal.MavenServiceLocator;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.providers.http.HttpWagon;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.GradleException;
+import org.gradle.api.Project;
+import org.gradle.api.tasks.TaskAction;
+import org.robovm.compiler.AppCompiler;
+import org.robovm.compiler.config.Arch;
+import org.robovm.compiler.config.Config;
+import org.robovm.compiler.config.OS;
+import org.robovm.compiler.log.Logger;
+import org.robovm.compiler.target.ios.ProvisioningProfile;
+import org.robovm.compiler.target.ios.SigningIdentity;
+import org.robovm.gradle.RoboVMPlugin;
+import org.robovm.gradle.RoboVMPluginExtension;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
@@ -51,15 +60,6 @@ import org.sonatype.aether.resolution.ArtifactResolutionException;
 import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
-import org.robovm.compiler.AppCompiler;
-import org.robovm.compiler.config.Arch;
-import org.robovm.compiler.config.Config;
-import org.robovm.compiler.config.OS;
-import org.robovm.compiler.log.Logger;
-import org.robovm.compiler.target.ios.ProvisioningProfile;
-import org.robovm.compiler.target.ios.SigningIdentity;
-import org.robovm.gradle.RoboVMPlugin;
-import org.robovm.gradle.RoboVMPluginExtension;
 
 /**
  *
@@ -214,6 +214,12 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
                 getLogger().debug("Using explicit iOS provisioning profile: " + iosProvisioningProfile);
                 builder.iosProvisioningProfile(ProvisioningProfile.find(ProvisioningProfile.list(),
                         iosProvisioningProfile));
+            }
+            
+            if (extension.getKeychainPassword() != null) {
+                builder.keychainPassword(extension.getKeychainPassword());
+            } else if (extension.getKeychainPasswordFile() != null) {
+                builder.keychainPasswordFile(new File(extension.getKeychainPasswordFile()));
             }
         }
 

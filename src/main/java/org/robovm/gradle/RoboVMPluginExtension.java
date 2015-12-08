@@ -43,6 +43,8 @@ public class RoboVMPluginExtension {
     private String archs;
     private String installDir;    
     private String cacheDir;
+    private String keychainPassword;
+    private String keychainPasswordFile;
 
     public RoboVMPluginExtension(Project project) {
         this.project = project;
@@ -223,5 +225,21 @@ public class RoboVMPluginExtension {
     
     public String getCacheDir() {
         return project.hasProperty("robovm.cacheDir") ? project.getProperties().get("robovm.cacheDir").toString() : null;
+    }
+    
+    public String getKeychainPassword() {
+        return project.hasProperty("robovm.keychainPassword") ? project.getProperties().get("robovm.keychainPassword").toString() : keychainPassword;
+    }
+    
+    public void setKeychainPassword(String keychainPassword) {
+        this.keychainPassword = keychainPassword;
+    }
+    
+    public String getKeychainPasswordFile() {
+        return project.hasProperty("robovm.keychainPasswordFile") ? project.getProperties().get("robovm.keychainPasswordFile").toString() : keychainPasswordFile;
+    }
+    
+    public void setKeychainPasswordFile(String keychainPasswordFile) {
+        this.keychainPasswordFile = keychainPasswordFile;
     }
 }
