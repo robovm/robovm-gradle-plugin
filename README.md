@@ -7,12 +7,15 @@ To use the RoboVM plugin, include in your build script:
 ```groovy
 // Pull the plugin from Maven Central
 buildscript {
+    project.ext.roboVMVersion = "1.12.0"
+    project.ext.roboVMGradleVersion = "1.12.0"
+
     repositories {
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'org.robovm:robovm-gradle-plugin:1.0.0'
+        classpath group: 'org.robovm', name: 'robovm-gradle-plugin', version: project.roboVMGradleVersion
     }
 }
 
@@ -24,19 +27,13 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
-ext {
-    // Configure your application main class
-    mainClassName = "org.robovm.sample.ios.RoboVMSampleIOSApp"
-    roboVMVersion = "1.0.0"
+dependencies {
+    compile group: 'org.robovm', name: 'robovm-rt', version: project.roboVMVersion
+    compile group: 'org.robovm', name: 'robovm-cocoatouch', version: project.roboVMVersion
 }
 
 robovm {
     // Configure robovm
-    iosSignIdentity = ""
-    iosProvisioningProfile = ""
-    iosSkipSigning = false
-    stdoutFifo = ""
-    stderrFifo = ""
 }
 ```
 
@@ -44,19 +41,19 @@ robovm {
 
 The RoboVM plugin defines the following tasks:
 
-* `launchIPhoneSimulator`: Runs Your iOS App in the iPhone Simulator.
-* `launchIPadSimulator`: Runs Your iOS App in the iPad Simulator.
-* `launchIOSDevice`: Runs Your iOS App on a connected iOS Device.
-* `launchTVOSSimulator`: Runs Your tvOS App in the AppleTV Simulator.
-* `launchTVOSDevice`: Runs Your tvOS App on a connected AppleTV Device.
-* `launchConsole`: Runs a Console App.
+* `launchIPhoneSimulator`: Runs your iOS app in the iPhone simulator.
+* `launchIPadSimulator`: Runs your iOS app in the iPad simulator.
+* `launchIOSDevice`: Runs your iOS app on a connected iOS device.
+* `launchTVOSSimulator`: Runs your tvOS app in the AppleTV simulator.
+* `launchTVOSDevice`: Runs your tvOS app on a connected AppleTV device.
+* `launchConsole`: Runs a console app.
 * `createIPA`: Creates .ipa file. This is an alias for the `robovmArchive` task.
 * `robovmArchive`: Compiles a binary, archives it in a format suitable for distribution and saves it to `build/robovm/`.
 * `robovmInstall`: Compiles a binary and installs it to `build/robovm/`.
 
 ## Project properties
 
-The iOS Simulator launcher properties can be set by project properties via `gradle.properties` or `-P` command line parameter:
+The simulator launcher properties can be set by project properties via `gradle.properties` or `-P` command line parameter:
 
 * `robovm.device.name`: Set the device name property.
  * iPhone-4s
