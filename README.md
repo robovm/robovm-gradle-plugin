@@ -105,6 +105,18 @@ To enable bitcode when running `createIPA`, `robovmArchive` or `robovmInstall` a
 gradle -Probovm.enableBitcode=true -Probovm.archs=thumbv7:arm64 robovmArchive
 ```
 
+## Headless code signing
+
+When building iOS/tvOS apps on a CI server `codesign` may need a password in order to unlock the keychain where the signing key is located. The Gradle plugin recognizes two properties which can be used to specify this password. If none of these properties have been specified the compiler will also look for a `KEYCHAIN_PASSWORD` environment variable.
+
+### robovm.keychainPassword
+
+Keychain password to use when unlocking the `codesign` keychain.
+
+### robovm.keychainPasswordFile
+
+Read the keychain password to use when unlocking the `codesign` keychain from the specified file.
+
 ## License Management
 To activate your license use the `activateLicense` task:
 
