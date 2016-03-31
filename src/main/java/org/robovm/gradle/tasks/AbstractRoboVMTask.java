@@ -228,6 +228,7 @@ abstract public class AbstractRoboVMTask extends DefaultTask {
         // configure the runtime classpath
         Set<File> classpathEntries = project.getConfigurations().getByName("runtime").getFiles();
         classpathEntries.add(new File(project.getBuildDir(), "classes/main"));
+        classpathEntries.add(new File(project.getBuildDir(), "resources/main"));
 
         if (project.hasProperty("output.classesDir")) {
             classpathEntries.add((File) project.property("output.classesDir"));
